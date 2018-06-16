@@ -16,7 +16,7 @@ public:
 private:
 	CNetworkSession * mListen;
 
-	CSessionManager SessionManager;
+	CSessionManager mSessionManager;
 
 protected:
 	// CIocp 상속 가상 함수들을 재선언

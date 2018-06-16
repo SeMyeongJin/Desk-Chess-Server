@@ -17,7 +17,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 
 	// 서버 시작
-
+	CServerIocp serverIocp;
+	if (serverIocp.Begin())
+	{
+		printf("Server is Start... \n");
+		getchar();
+		serverIocp.End();
+	}
 
 	// 종료시 언로드 및 MiniDump 끝냄.
 	WSACleanup();

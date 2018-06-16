@@ -171,19 +171,22 @@ BOOL CNetworkSession::Listen(USHORT port, INT backLog)
 
 	// Listen할 정보를 저장하는 변수
 	SOCKADDR_IN listenSocketInfo;
-
+	
 	listenSocketInfo.sin_family = AF_INET;
 	listenSocketInfo.sin_port = htons(port);
 	listenSocketInfo.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 
-	if (bind(mSocket, (struct sockaddr*)&listenSocketInfo, sizeof(SOCKADDR_IN) == SOCKET_ERROR)) {
+	if (bind(mSocket, (struct sockaddr*)&listenSocketInfo, sizeof(SOCKADDR_IN)) == SOCKET_ERROR) 
+	{
 		End();
 
 		return FALSE;
 	}
-	if (listen(mSocket, backLog) == SOCKET_ERROR) {
-		End();
 
+	if (listen(mSocket, backLog) == SOCKET_ERROR) 
+	{
+		End();
+	
 		return FALSE;
 	}
 
@@ -192,7 +195,8 @@ BOOL CNetworkSession::Listen(USHORT port, INT backLog)
 	Linger.l_onoff = 1;
 	Linger.l_linger = 0;
 
-	if (setsockopt(mSocket, SOL_SOCKET, SO_LINGER, (char*)&Linger, sizeof(linger)) == SOCKET_ERROR) {
+	if (setsockopt(mSocket, SOL_SOCKET, SO_LINGER, (char*)&Linger, sizeof(LINGER)) == SOCKET_ERROR)
+	{
 		End();
 
 		return FALSE;

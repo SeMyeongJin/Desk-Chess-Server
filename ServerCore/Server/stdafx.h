@@ -5,8 +5,8 @@
 
 #pragma once
 
-#define SERVER_PORT 9000
 #define MAX_USER 100
+#define SERVER_PORT 9000
 
 #include "../KomorisLib/ServerLibrary.h"
 

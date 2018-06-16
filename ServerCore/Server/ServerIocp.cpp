@@ -33,11 +33,19 @@ BOOL CServerIocp::Begin(VOID)
 	if (!mListen->Listen(SERVER_PORT, MAX_USER))
 	{
 		CServerIocp::End();
-
+		
 		return FALSE;
 	}
 
 	if (!CIocp::RegisterSocketToIocp(mListen->GetSocket(), reinterpret_cast<ULONG_PTR>(mListen)))
+	{
+		CServerIocp::End();
+
+		return FALSE;
+	}
+	
+	printf("SessionManager Start\n");
+	if (!mSessionManager.Begin(mListen->GetSocket()))
 	{
 		CServerIocp::End();
 
@@ -51,6 +59,8 @@ VOID CServerIocp::End(VOID)
 {
 	CIocp::End();
 
+	mSessionManager.End();
+
 	if (mListen)
 	{
 		mListen->End();
@@ -62,10 +72,25 @@ VOID CServerIocp::End(VOID)
 // CIocp의 가상 함수
 VOID CServerIocp::OnIoConnected(VOID * object)
 {
+	CConnectedSession * connectedSession = reinterpret_cast<CConnectedSession*>(object);
+
+	printf("Connected Session...\n");
+	if (!CIocp::RegisterSocketToIocp(connectedSession->GetSocket(), reinterpret_cast<ULONG_PTR>(connectedSession)))
+		return;
+
+	if (!connectedSession->InitializeReadForIocp())
+	{
+		connectedSession->Restart(mListen->GetSocket());
+
+		return;
+	}
 }
 
 VOID CServerIocp::OnIoDisconnected(VOID * object)
 {
+	CConnectedSession * connectedSession = reinterpret_cast<CConnectedSession*>(object);
+
+	connectedSession->Restart(mListen->GetSocket());
 }
 
 VOID CServerIocp::OnIoRead(VOID * object, DWORD dwDataLength)
