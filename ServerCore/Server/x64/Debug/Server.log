@@ -1,3 +1,10 @@
-﻿  ServerIocp.cpp
+﻿  stdafx.cpp
+c:\program files (x86)\windows kits\8.1\include\um\dbghelp.h(1544): warning C4091: 'typedef ': ignored on left of '' when no variable is declared
+c:\program files (x86)\windows kits\8.1\include\um\dbghelp.h(3190): warning C4091: 'typedef ': ignored on left of '' when no variable is declared
+  SessionManager.cpp
+  ServerIocp.cpp
+  Server.cpp
+  ConnectedSession.cpp
+  Generating Code...
   Server.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\Server.exe
   Server.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\Server.pdb (Full PDB)

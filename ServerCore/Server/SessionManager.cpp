@@ -54,3 +54,14 @@ VOID CSessionManager::End(VOID)
 
 	mConnectedSessions.clear();
 }
+
+VOID CSessionManager::WriteAll(DWORD dwProtocol, BYTE * data, DWORD dwLength)
+{
+	CThreadSync sync;
+
+	for (DWORD i = 0; i < mConnectedSessions.size(); i++)
+	{
+		if (mConnectedSessions[i]->GetConnected())
+			mConnectedSessions[i]->WritePacket(dwProtocol, data, dwLength);
+	}
+}

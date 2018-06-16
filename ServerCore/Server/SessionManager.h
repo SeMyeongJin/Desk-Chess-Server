@@ -13,6 +13,9 @@ public:
 	BOOL Begin(SOCKET listenSock);
 
 	VOID End(VOID);
+
+	// 접속된 모든 ConnectedSession에 패킷을 전송하는 함수
+	VOID WriteAll(DWORD dwProtocol, BYTE * data, DWORD dwLength);
 };
 
 

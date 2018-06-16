@@ -13,10 +13,16 @@ public:
 	// 개체를 종료하기 위한 함수
 	VOID End(VOID);
 
+	// KeepAlive Thread Callback
+	VOID KeepThreadCallback(VOID);
+
 private:
 	CNetworkSession * mListen;
 
 	CSessionManager mSessionManager;
+
+	HANDLE mKeepThread;
+	HANDLE mKeepThreadDestroyEvent;
 
 protected:
 	// CIocp 상속 가상 함수들을 재선언
