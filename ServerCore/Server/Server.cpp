@@ -20,7 +20,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	CServerIocp serverIocp;
 	if (serverIocp.Begin())
 	{
-		printf("Server is Start... \n");
+		printf("Iocp Server Start============================\n");
 		getchar();
 		serverIocp.End();
 	}

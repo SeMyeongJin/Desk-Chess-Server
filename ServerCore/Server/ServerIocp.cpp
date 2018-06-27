@@ -56,6 +56,7 @@ VOID CServerIocp::OnIoDisconnected(VOID * object)
 {
 	CConnectedSession * connectedSession = reinterpret_cast<CConnectedSession*>(object);
 
+	printf("Disconnected Session...\n");
 	connectedSession->Restart(mListen->GetSocket());
 
 	connectedSession->SetConnected(FALSE);
@@ -81,6 +82,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
+	printf("Network Initialize\n");
 
 	if (!mListen->TcpBind())
 	{
@@ -88,6 +90,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
+	printf("Bind Complete\n");
 
 	if (!mListen->Listen(SERVER_PORT, MAX_USER))
 	{
@@ -95,6 +98,7 @@ BOOL CServerIocp::Begin(VOID)
 		
 		return FALSE;
 	}
+	printf("Listen Complete\n");
 
 	if (!CIocp::RegisterSocketToIocp(mListen->GetSocket(), reinterpret_cast<ULONG_PTR>(mListen)))
 	{
@@ -102,14 +106,15 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
+	printf("Socket connects Iocp\n");
 	
-	printf("SessionManager Start\n");
 	if (!mSessionManager.Begin(mListen->GetSocket()))
 	{
 		CServerIocp::End();
 
 		return FALSE;
 	}
+	printf("SessionManager initialize\n");
 
 	mKeepThreadDestroyEvent = CreateEvent(0, FALSE, FALSE, 0);
 	if (!mKeepThreadDestroyEvent)
