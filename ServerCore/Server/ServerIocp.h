@@ -17,6 +17,7 @@ public:
 	VOID KeepThreadCallback(VOID);
 
 private:
+	// 서버의 Listen을 담당할 개체
 	CNetworkSession * mListen;
 
 	CSessionManager mSessionManager;
@@ -30,6 +31,11 @@ protected:
 	VOID OnIoWrote(VOID * object, DWORD dwDataLength);
 	VOID OnIoConnected(VOID * object);
 	VOID OnIoDisconnected(VOID * object);
+
+private:
+	// ProtocolProcess에서 처리해야 할 함수들
+	VOID PROC_PT_LOGIN(CConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
+	VOID PROC_PT_CHAT(CConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
 };
 
 /* ServerIocp클래스는 Iocp클래스를 상속받은 클래스로, 모든 통신 관련 작업 담당*/
@@ -37,5 +43,5 @@ protected:
 /*
 TODO:
 Listen을 담당할 소켓을 생성하고 서버에서 사용할 IOCP를 시작시키는 작업 (Begin -> Done)
-Accept를 하는 작업
+Accept를 하는 작업 (DONE)
 */

@@ -54,7 +54,7 @@ BOOL CIocp::Begin(VOID)
 
 		WaitForSingleObject(mStartupEventHandle, INFINITE);
 	}
-
+	
 	return TRUE;
 }
 

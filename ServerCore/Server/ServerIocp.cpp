@@ -37,7 +37,7 @@ VOID CServerIocp::KeepThreadCallback(VOID)
 VOID CServerIocp::OnIoConnected(VOID * object)
 {
 	CConnectedSession * connectedSession = reinterpret_cast<CConnectedSession*>(object);
-
+	
 	printf("Connected Session...\n");
 	if (!CIocp::RegisterSocketToIocp(connectedSession->GetSocket(), reinterpret_cast<ULONG_PTR>(connectedSession)))
 		return;
@@ -64,6 +64,28 @@ VOID CServerIocp::OnIoDisconnected(VOID * object)
 
 VOID CServerIocp::OnIoRead(VOID * object, DWORD dwDataLength)
 {
+	CConnectedSession *pConnectedSession = reinterpret_cast<CConnectedSession*>(object);
+	
+	DWORD dwProtocol = 0, dwPacketLength = 0;
+	BYTE Packet[MAX_BUFFER_LENGTH] = { 0, };
+	
+	if (pConnectedSession->ReadPacketForIocp(dwDataLength))
+	{
+		while (pConnectedSession->GetPacket(dwProtocol, Packet, dwPacketLength))
+		{
+			switch (dwProtocol)
+			{
+			case PT_LOGIN:
+				PROC_PT_LOGIN(pConnectedSession, dwProtocol, Packet, dwPacketLength);
+				break;
+			case PT_CHAT:
+				PROC_PT_CHAT(pConnectedSession, dwProtocol, Packet, dwPacketLength);
+				break;
+			}
+		}
+	}
+	if (!pConnectedSession->InitializeReadForIocp())
+		pConnectedSession->Restart(mListen->GetSocket());
 }
 
 VOID CServerIocp::OnIoWrote(VOID * object, DWORD dwDataLength)
@@ -73,7 +95,7 @@ VOID CServerIocp::OnIoWrote(VOID * object, DWORD dwDataLength)
 BOOL CServerIocp::Begin(VOID)
 {
 	if (!CIocp::Begin()) return FALSE;
-
+	_tprintf(_T("IO Completion Port handle creation completed\n"));
 	mListen = new CNetworkSession();
 
 	if (!mListen->Begin())
@@ -82,7 +104,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
-	printf("Network Initialize\n");
+	_tprintf(_T("Initialize NetworkSession\n"));
 
 	if (!mListen->TcpBind())
 	{
@@ -90,7 +112,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
-	printf("Bind Complete\n");
+	_tprintf(_T("TCP Socket creation completed\n"));
 
 	if (!mListen->Listen(SERVER_PORT, MAX_USER))
 	{
@@ -98,7 +120,7 @@ BOOL CServerIocp::Begin(VOID)
 		
 		return FALSE;
 	}
-	printf("Listen Complete\n");
+	_tprintf(_T("Bind, Listen function completed\n"));
 
 	if (!CIocp::RegisterSocketToIocp(mListen->GetSocket(), reinterpret_cast<ULONG_PTR>(mListen)))
 	{
@@ -106,7 +128,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
-	printf("Socket connects Iocp\n");
+	_tprintf(_T("Socket registration completed\n"));
 	
 	if (!mSessionManager.Begin(mListen->GetSocket()))
 	{
@@ -114,7 +136,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
-	printf("SessionManager initialize\n");
+	_tprintf(_T("Initialize SessionManager\n"));
 
 	mKeepThreadDestroyEvent = CreateEvent(0, FALSE, FALSE, 0);
 	if (!mKeepThreadDestroyEvent)

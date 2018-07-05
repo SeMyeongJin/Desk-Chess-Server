@@ -7,6 +7,7 @@ public:
 	virtual ~CConnectedSession(VOID);
 
 public:
+	// 연결된 세션 종료 후 다시 Accept 상태로 만들어주는 함수
 	BOOL Restart(SOCKET listenSock);
 
 	VOID SetConnected(BOOL bConnected);

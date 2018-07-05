@@ -291,7 +291,7 @@ BOOL CNetworkSession::ReadForIocp(BYTE* data, DWORD &dataLength)
 
 	// WSARecv를 통해 받아온 데이터가 있는 mReadBuffer로 부터 데이터 복사
 	CopyMemory(data, mReadBuffer, dataLength);
-
+	
 	return TRUE;
 }
 
