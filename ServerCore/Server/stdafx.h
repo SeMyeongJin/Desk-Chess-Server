@@ -22,8 +22,14 @@
 #include "../KomorisLib/Stream.h"
 #include "../KomorisLib/MiniDump.h"
 
+#define HAVE_STRUCT_TIMESPEC
+
+#include <my_global.h>
+#include <mysql.h>
+
 #include "ConnectedSession.h"
 #include "SessionManager.h"
 #include "ServerIocp.h"
+#include "DBManager.h"
 
 #include "PacketProtocol.h"

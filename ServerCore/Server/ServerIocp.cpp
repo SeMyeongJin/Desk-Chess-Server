@@ -75,6 +75,9 @@ VOID CServerIocp::OnIoRead(VOID * object, DWORD dwDataLength)
 		{
 			switch (dwProtocol)
 			{
+			case PT_SIGNUP:
+				PROC_PT_SIGNUP(pConnectedSession, dwProtocol, Packet, dwPacketLength);
+				break;
 			case PT_LOGIN:
 				PROC_PT_LOGIN(pConnectedSession, dwProtocol, Packet, dwPacketLength);
 				break;
@@ -136,7 +139,7 @@ BOOL CServerIocp::Begin(VOID)
 
 		return FALSE;
 	}
-	_tprintf(_T("Initialize SessionManager\n"));
+	_tprintf(_T("Initialize SessionManager\n\n"));
 
 	mKeepThreadDestroyEvent = CreateEvent(0, FALSE, FALSE, 0);
 	if (!mKeepThreadDestroyEvent)
@@ -151,6 +154,8 @@ BOOL CServerIocp::Begin(VOID)
 		CServerIocp::End();
 		return FALSE;
 	}
+	
+	GDBManager->Begin();
 
 	return TRUE;
 }

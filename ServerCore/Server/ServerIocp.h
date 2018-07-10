@@ -33,7 +33,8 @@ protected:
 	VOID OnIoDisconnected(VOID * object);
 
 private:
-	// ProtocolProcess에서 처리해야 할 함수들
+	// ProtocolProcess
+	VOID PROC_PT_SIGNUP(CConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
 	VOID PROC_PT_LOGIN(CConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
 	VOID PROC_PT_CHAT(CConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
 };

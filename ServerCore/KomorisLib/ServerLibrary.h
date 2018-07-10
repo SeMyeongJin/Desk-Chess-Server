@@ -13,6 +13,9 @@
 
 #include <vector>
 #include <map>
+#include <string>
+
+using namespace std;
 
 #pragma warning(disable : 4996)
 
