@@ -7,7 +7,7 @@ public:
 	virtual ~ClientSession(VOID);
 
 private:
-	PacketSession	mSession; // 통신을 담당하는 Session 개체
+	PacketWrapping	mSession; // 통신을 담당하는 Session 개체
 	CircularQueue	mReadPacketQueue; // 받은 패킷을 저장하고 있는 큐
 
 	BOOL			isUdp; // 현재 UDP로 사용 중인지 확인하는 변수

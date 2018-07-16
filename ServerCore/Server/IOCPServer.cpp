@@ -100,7 +100,7 @@ BOOL IOCPServer::Begin(VOID)
 	if (!IOCP::Begin()) return FALSE;
 	_tprintf(_T("IO Completion Port handle creation completed\n"));
 	
-	mListen = new NetworkSession();
+	mListen = new NetworkWrapping();
 	if (!mListen->Begin())
 	{
 		IOCPServer::End();

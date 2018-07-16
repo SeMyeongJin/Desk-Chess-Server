@@ -2,8 +2,8 @@
 #include "CriticalSection.h"
 #include "MultiThreadSync.h"
 #include "CircularQueue.h"
-#include "NetworkSession.h"
-#include "PacketSession.h"
+#include "NetworkWrapping.h"
+#include "PacketWrapping.h"
 #include "EventSelect.h"
 #include "ClientSession.h"
 

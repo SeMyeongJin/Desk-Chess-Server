@@ -1,6 +1,6 @@
 #pragma once
 
-class ConnectedSession : public PacketSession
+class ConnectedSession : public PacketWrapping
 {
 public:
 	ConnectedSession(VOID);

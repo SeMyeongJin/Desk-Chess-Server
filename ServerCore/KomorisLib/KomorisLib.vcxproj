@@ -141,8 +141,8 @@
     <ClInclude Include="MemoryPool.h" />
     <ClInclude Include="MiniDump.h" />
     <ClInclude Include="MultiThreadSync.h" />
-    <ClInclude Include="NetworkSession.h" />
-    <ClInclude Include="PacketSession.h" />
+    <ClInclude Include="NetworkWrapping.h" />
+    <ClInclude Include="PacketWrapping.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ServerLibrary.h" />
     <ClInclude Include="stdafx.h" />
@@ -156,8 +156,8 @@
     <ClCompile Include="EventSelect.cpp" />
     <ClCompile Include="Iocp.cpp" />
     <ClCompile Include="MiniDump.cpp" />
-    <ClCompile Include="NetworkSession.cpp" />
-    <ClCompile Include="PacketSession.cpp" />
+    <ClCompile Include="NetworkWrapping.cpp" />
+    <ClCompile Include="PacketWrapping.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

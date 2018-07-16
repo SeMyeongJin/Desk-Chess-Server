@@ -1,0 +1,20 @@
+Table : user
+
+UserID, UserPW, UserName, Life Point(Lank Point)
+
+Server (기본)
+
+Packet Protocl 
+
+1. SignUp, SignUp_SUCC, SignUp_FAIL
+
+2. Login, Login_SUCC, Login_FAIL
+
+3. CHAT
+
+Transmission Error Code
+1. ID_ALREADY_REGIST 등록된 아이디
+2. ID_ERROR ID에 문제있음 20자 이내로 설정해주시기 바랍니다.
+3. PW_ERROR PW에 문제있음 20자 이내로 설정 바랍니다.
+4. NAME_ERROR Name에 문제있음 20자 이내로 설정 바랍니다.
+5. ID_ERROR 등록된 ID가 없거나 ID에 맞는 비밀번호가 틀렸습니다.

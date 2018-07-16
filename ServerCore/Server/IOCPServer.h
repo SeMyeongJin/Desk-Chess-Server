@@ -18,7 +18,7 @@ public:
 
 private:
 	// 서버의 Listen을 담당할 개체
-	NetworkSession * mListen;
+	NetworkWrapping * mListen;
 
 	SessionManager mSessionManager;
 
