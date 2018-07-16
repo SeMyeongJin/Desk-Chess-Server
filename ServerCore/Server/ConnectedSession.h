@@ -1,10 +1,10 @@
 #pragma once
 
-class CConnectedSession : public CPacketSession
+class ConnectedSession : public PacketSession
 {
 public:
-	CConnectedSession(VOID);
-	virtual ~CConnectedSession(VOID);
+	ConnectedSession(VOID);
+	virtual ~ConnectedSession(VOID);
 
 public:
 	// 연결된 세션 종료 후 다시 Accept 상태로 만들어주는 함수

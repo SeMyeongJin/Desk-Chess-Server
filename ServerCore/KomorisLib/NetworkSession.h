@@ -1,10 +1,10 @@
 #pragma once
 
-class CNetworkSession : public CMultiThreadSync<CNetworkSession>
+class NetworkSession : public MultiThreadSync<NetworkSession>
 {
 public:
-	CNetworkSession(VOID);
-	virtual ~CNetworkSession(VOID);
+	NetworkSession(VOID);
+	virtual ~NetworkSession(VOID);
 
 public:
 	BOOL			Begin(VOID);
@@ -60,7 +60,7 @@ private:
 	HANDLE					mReliableUdpThreadWakeUpEvent;
 	HANDLE					mReliableUdpWriteCompleteEvent;
 
-	CCircularQueue			mReliableWriteQueue;
+	CircularQueue			mReliableWriteQueue;
 
 	BOOL					mIsReliableUdpSending;
 };

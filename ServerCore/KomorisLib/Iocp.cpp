@@ -4,13 +4,13 @@
 
 DWORD WINAPI WorkerThreadCallback(LPVOID parameter)
 {
-	CIocp *owner = (CIocp*)parameter;
+	IOCP *owner = (IOCP*)parameter;
 	owner->WorkerThreadCallback();
 
 	return 0;
 }
 
-CIocp::CIocp(VOID)
+IOCP::IOCP(VOID)
 {
 	mIocpHandle = NULL; // IOCP 관리하는 핸들 값
 	mWorkerThreadCount = 0; // 사용할 WorkerThread 개수
@@ -18,11 +18,11 @@ CIocp::CIocp(VOID)
 	mStartupEventHandle = NULL; // 시작을 관리하는 이벤트
 }
 
-CIocp::~CIocp(VOID)
+IOCP::~IOCP(VOID)
 {
 }
 
-BOOL CIocp::Begin(VOID)
+BOOL IOCP::Begin(VOID)
 {
 	mIocpHandle = NULL;
 
@@ -58,7 +58,7 @@ BOOL CIocp::Begin(VOID)
 	return TRUE;
 }
 
-BOOL CIocp::End(VOID)
+BOOL IOCP::End(VOID)
 {
 	// IOCP를 이용해서 각 WorkerThread마다 종료를 요청합니다
 	for (DWORD i = 0; i < mWorkerThreadVector.size(); i++)
@@ -83,7 +83,7 @@ BOOL CIocp::End(VOID)
 	return TRUE;
 }
 
-BOOL CIocp::RegisterSocketToIocp(SOCKET socket, ULONG_PTR completionKey)
+BOOL IOCP::RegisterSocketToIocp(SOCKET socket, ULONG_PTR completionKey)
 {
 	if (!socket || !completionKey)
 		return FALSE;
@@ -96,7 +96,7 @@ BOOL CIocp::RegisterSocketToIocp(SOCKET socket, ULONG_PTR completionKey)
 	return TRUE;
 }
 
-VOID CIocp::WorkerThreadCallback(VOID)
+VOID IOCP::WorkerThreadCallback(VOID)
 {
 	BOOL				successed = FALSE;
 	DWORD				numberOfByteTransfered = 0;

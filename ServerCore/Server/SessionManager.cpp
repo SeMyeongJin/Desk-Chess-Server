@@ -2,38 +2,38 @@
 #include "SessionManager.h"
 
 
-CSessionManager::CSessionManager()
+SessionManager::SessionManager()
 {
 }
 
 
-CSessionManager::~CSessionManager()
+SessionManager::~SessionManager()
 {
 }
 
-BOOL CSessionManager::Begin(SOCKET listenSock)
+BOOL SessionManager::Begin(SOCKET listenSock)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!listenSock) return FALSE;
 
 	for (DWORD i = 0; i < MAX_USER; i++)
 	{
-		CConnectedSession * CSession = new CConnectedSession();
-		mConnectedSessions.push_back(CSession);
+		ConnectedSession *pConnectedSession = new ConnectedSession();
+		mConnectedSessions.push_back(pConnectedSession);
 	}
 
 	for (DWORD i = 0; i < MAX_USER; i++)
 	{
 		if (!mConnectedSessions[i]->Begin())
 		{
-			CSessionManager::End();
+			SessionManager::End();
 			return FALSE;
 		}
 
 		if (!mConnectedSessions[i]->Accept(listenSock))
 		{
-			CSessionManager::End();
+			SessionManager::End();
 			return FALSE;
 		}
 	}
@@ -41,9 +41,9 @@ BOOL CSessionManager::Begin(SOCKET listenSock)
 	return TRUE;
 }
 
-VOID CSessionManager::End(VOID)
+VOID SessionManager::End(VOID)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	for (DWORD i = 0; i < mConnectedSessions.size(); i++)
 	{
@@ -55,9 +55,9 @@ VOID CSessionManager::End(VOID)
 	mConnectedSessions.clear();
 }
 
-VOID CSessionManager::WriteAll(DWORD dwProtocol, BYTE * data, DWORD dwLength)
+VOID SessionManager::WriteAll(DWORD dwProtocol, BYTE * data, DWORD dwLength)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	for (DWORD i = 0; i < mConnectedSessions.size(); i++)
 	{

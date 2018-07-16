@@ -1,13 +1,13 @@
 #pragma once
 
-class CSessionManager : public CMultiThreadSync<CSessionManager>
+class SessionManager : public MultiThreadSync<SessionManager>
 {
 public:
-	CSessionManager();
-	~CSessionManager();
+	SessionManager();
+	~SessionManager();
 
 private:
-	std::vector<CConnectedSession*> mConnectedSessions;
+	std::vector<ConnectedSession*> mConnectedSessions;
 
 public:
 	BOOL Begin(SOCKET listenSock);

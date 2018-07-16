@@ -1,14 +1,14 @@
 #pragma once
 
-class CCriticalSection
+class CriticalSection
 {
 public:
-	CCriticalSection(VOID)
+	CriticalSection(VOID)
 	{
 		InitializeCriticalSection(&mSync);
 	}
 
-	~CCriticalSection(VOID)
+	~CriticalSection(VOID)
 	{
 		DeleteCriticalSection(&mSync);
 	}

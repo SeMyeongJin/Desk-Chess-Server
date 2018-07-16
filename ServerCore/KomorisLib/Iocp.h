@@ -1,10 +1,10 @@
 #pragma once
 
-class CIocp
+class IOCP
 {
 public:
-	CIocp(VOID);
-	virtual ~CIocp(VOID);
+	IOCP(VOID);
+	virtual ~IOCP(VOID);
 
 private:
 	HANDLE					mIocpHandle;

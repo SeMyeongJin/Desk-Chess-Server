@@ -5,20 +5,20 @@
 #include "Stream.h"
 
 
-CStream::CStream(VOID)
+Stream::Stream(VOID)
 {
 	mBufferPointer = NULL;
 	mLength = 0;
 }
 
 
-CStream::~CStream(VOID)
+Stream::~Stream(VOID)
 {
 }
 
 
 // 외부의 버퍼를 지정하여 포인터를 넣습니다.
-BOOL CStream::SetBuffer(BYTE *buffer)
+BOOL Stream::SetBuffer(BYTE *buffer)
 {
 	if (!buffer)
 		return FALSE;
@@ -29,7 +29,7 @@ BOOL CStream::SetBuffer(BYTE *buffer)
 	return TRUE;
 }
 
-BOOL CStream::SetBuffer()
+BOOL Stream::SetBuffer()
 {
 	if (!mBufferPointer)
 		return FALSE;
@@ -40,7 +40,7 @@ BOOL CStream::SetBuffer()
 }
 
 // INT32형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadInt32(INT *data)
+BOOL Stream::ReadInt32(INT *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(INT));
 
@@ -50,7 +50,7 @@ BOOL CStream::ReadInt32(INT *data)
 }
 
 // DWORD형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadDWORD(DWORD *data)
+BOOL Stream::ReadDWORD(DWORD *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(DWORD));
 
@@ -60,7 +60,7 @@ BOOL CStream::ReadDWORD(DWORD *data)
 }
 
 // DWORD_PTR형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadDWORD_PTR(DWORD_PTR *data)
+BOOL Stream::ReadDWORD_PTR(DWORD_PTR *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(DWORD_PTR));
 
@@ -70,7 +70,7 @@ BOOL CStream::ReadDWORD_PTR(DWORD_PTR *data)
 }
 
 // BYTE형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadByte(BYTE *data)
+BOOL Stream::ReadByte(BYTE *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(BYTE));
 
@@ -80,7 +80,7 @@ BOOL CStream::ReadByte(BYTE *data)
 }
 
 // BYTE 배열형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadBytes(BYTE *data, DWORD length)
+BOOL Stream::ReadBytes(BYTE *data, DWORD length)
 {
 	CopyMemory(data, mBufferPointer + mLength, length);
 
@@ -90,7 +90,7 @@ BOOL CStream::ReadBytes(BYTE *data, DWORD length)
 }
 
 // FLOAT형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadFloat(FLOAT *data)
+BOOL Stream::ReadFloat(FLOAT *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(FLOAT));
 
@@ -100,7 +100,7 @@ BOOL CStream::ReadFloat(FLOAT *data)
 }
 
 // INT64형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadInt64(INT64 *data)
+BOOL Stream::ReadInt64(INT64 *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(INT64));
 
@@ -110,7 +110,7 @@ BOOL CStream::ReadInt64(INT64 *data)
 }
 
 // USHORT형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadUSHORT(USHORT *data)
+BOOL Stream::ReadUSHORT(USHORT *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(USHORT));
 
@@ -120,7 +120,7 @@ BOOL CStream::ReadUSHORT(USHORT *data)
 }
 
 // SHORT형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadSHORT(SHORT *data)
+BOOL Stream::ReadSHORT(SHORT *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(SHORT));
 
@@ -130,7 +130,7 @@ BOOL CStream::ReadSHORT(SHORT *data)
 }
 
 // BOOL형 데이터를 읽을 때 사용합니다.
-BOOL CStream::ReadBOOL(BOOL *data)
+BOOL Stream::ReadBOOL(BOOL *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(BOOL));
 
@@ -139,7 +139,7 @@ BOOL CStream::ReadBOOL(BOOL *data)
 	return TRUE;
 }
 
-BOOL CStream::ReadWCHAR(WCHAR *data)
+BOOL Stream::ReadWCHAR(WCHAR *data)
 {
 	CopyMemory(data, mBufferPointer + mLength, sizeof(WCHAR));
 
@@ -148,7 +148,7 @@ BOOL CStream::ReadWCHAR(WCHAR *data)
 	return TRUE;
 }
 
-BOOL CStream::ReadWCHARs(LPWSTR data, DWORD length)
+BOOL Stream::ReadWCHARs(LPWSTR data, DWORD length)
 {
 	CopyMemory(data, mBufferPointer + mLength, length * sizeof(WCHAR));
 
@@ -158,7 +158,7 @@ BOOL CStream::ReadWCHARs(LPWSTR data, DWORD length)
 }
 
 // INT32형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteInt32(INT *data)
+BOOL Stream::WriteInt32(INT data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(INT));
 
@@ -168,7 +168,7 @@ BOOL CStream::WriteInt32(INT *data)
 }
 
 // DWORD형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteDWORD(DWORD *data)
+BOOL Stream::WriteDWORD(DWORD data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(DWORD));
 
@@ -178,7 +178,7 @@ BOOL CStream::WriteDWORD(DWORD *data)
 }
 
 // DWORD_PTR형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteDWORD_PTR(DWORD_PTR *data)
+BOOL Stream::WriteDWORD_PTR(DWORD_PTR data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(DWORD_PTR));
 
@@ -188,7 +188,7 @@ BOOL CStream::WriteDWORD_PTR(DWORD_PTR *data)
 }
 
 // BYTE형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteByte(BYTE *data)
+BOOL Stream::WriteByte(BYTE data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(BYTE));
 
@@ -198,9 +198,9 @@ BOOL CStream::WriteByte(BYTE *data)
 }
 
 // BYTE 배열형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteBytes(BYTE *data, DWORD length)
+BOOL Stream::WriteBytes(BYTE *data, DWORD length)
 {
-	CopyMemory(mBufferPointer + mLength, &data, length);
+	CopyMemory(mBufferPointer + mLength, data, length);
 
 	mLength += length;
 
@@ -208,7 +208,7 @@ BOOL CStream::WriteBytes(BYTE *data, DWORD length)
 }
 
 // FLOAT형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteFloat(FLOAT *data)
+BOOL Stream::WriteFloat(FLOAT data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(FLOAT));
 
@@ -218,7 +218,7 @@ BOOL CStream::WriteFloat(FLOAT *data)
 }
 
 // INT64형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteInt64(INT64 *data)
+BOOL Stream::WriteInt64(INT64 data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(INT64));
 
@@ -228,7 +228,7 @@ BOOL CStream::WriteInt64(INT64 *data)
 }
 
 // USHORT형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteUSHORT(USHORT *data)
+BOOL Stream::WriteUSHORT(USHORT data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(USHORT));
 
@@ -238,7 +238,7 @@ BOOL CStream::WriteUSHORT(USHORT *data)
 }
 
 // SHORT형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteSHORT(SHORT *data)
+BOOL Stream::WriteSHORT(SHORT data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(SHORT));
 
@@ -248,7 +248,7 @@ BOOL CStream::WriteSHORT(SHORT *data)
 }
 
 // BOOL형 데이터를 쓸 때 사용합니다.
-BOOL CStream::WriteBOOL(BOOL *data)
+BOOL Stream::WriteBOOL(BOOL data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(BOOL));
 
@@ -257,7 +257,7 @@ BOOL CStream::WriteBOOL(BOOL *data)
 	return TRUE;
 }
 
-BOOL CStream::WriteWCHAR(WCHAR data)
+BOOL Stream::WriteWCHAR(WCHAR data)
 {
 	CopyMemory(mBufferPointer + mLength, &data, sizeof(WCHAR));
 
@@ -266,7 +266,7 @@ BOOL CStream::WriteWCHAR(WCHAR data)
 	return TRUE;
 }
 
-BOOL CStream::WriteWCHARs(LPCWSTR data, DWORD length)
+BOOL Stream::WriteWCHARs(LPCWSTR data, DWORD length)
 {
 	CopyMemory(mBufferPointer + mLength, data, length * sizeof(WCHAR));
 
@@ -276,7 +276,7 @@ BOOL CStream::WriteWCHARs(LPCWSTR data, DWORD length)
 }
 
 // 전체 길이를 받아올 때 사용합니다.
-DWORD CStream::GetLength(VOID)
+DWORD Stream::GetLength(VOID)
 {
 	return mLength;
 }

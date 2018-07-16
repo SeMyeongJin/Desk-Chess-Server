@@ -6,7 +6,7 @@
 #pragma once
 
 #define MAX_USER 100
-#define SERVER_PORT 1820
+#define SERVER_PORT 9000
 
 #include "../KomorisLib/ServerLibrary.h"
 
@@ -29,7 +29,7 @@
 
 #include "ConnectedSession.h"
 #include "SessionManager.h"
-#include "ServerIocp.h"
+#include "IOCPServer.h"
 #include "DBManager.h"
 
 #include "PacketProtocol.h"

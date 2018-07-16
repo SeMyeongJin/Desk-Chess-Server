@@ -2,35 +2,35 @@
 #include "ConnectedSession.h"
 
 
-CConnectedSession::CConnectedSession()
+ConnectedSession::ConnectedSession()
 {
 	mConnected = FALSE;
 }
 
 
-CConnectedSession::~CConnectedSession()
+ConnectedSession::~ConnectedSession()
 {
 }
 
-BOOL CConnectedSession::Restart(SOCKET listenSock)
+BOOL ConnectedSession::Restart(SOCKET listenSock)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	End();
 
 	return Begin() && Accept(listenSock);
 }
 
-VOID CConnectedSession::SetConnected(BOOL bConnected)
+VOID ConnectedSession::SetConnected(BOOL bConnected)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	mConnected = bConnected;
 }
 
-BOOL CConnectedSession::GetConnected(VOID)
+BOOL ConnectedSession::GetConnected(VOID)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	return mConnected;
 }

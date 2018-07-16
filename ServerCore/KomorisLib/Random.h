@@ -1,10 +1,10 @@
 #pragma once
 
-class CRandom
+class Random
 {
 public:
-	CRandom(VOID);
-	virtual ~CRandom(VOID);
+	Random(VOID);
+	virtual ~Random(VOID);
 
 private:
 	UINT	mSeed;

@@ -12,11 +12,11 @@ typedef struct _QUEUE_DATA
 	DWORD	Protocol;
 } QUEUE_DATA;
 
-class CCircularQueue : public CMultiThreadSync<CCircularQueue>
+class CircularQueue : public MultiThreadSync<CircularQueue>
 {
 public:
-	CCircularQueue(VOID);
-	~CCircularQueue(VOID);
+	CircularQueue(VOID);
+	~CircularQueue(VOID);
 
 private:
 	QUEUE_DATA	mQueue[MAX_QUEUE_LENGTH];

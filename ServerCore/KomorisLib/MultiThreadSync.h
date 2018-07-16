@@ -1,27 +1,27 @@
 #pragma once
 
 template <class T>
-class CMultiThreadSync
+class MultiThreadSync
 {
-	friend class CThreadSync;
+	friend class ThreadSync;
 public:
-	class CThreadSync
+	class ThreadSync
 	{
 	public:
-		CThreadSync(VOID)
+		ThreadSync(VOID)
 		{
 			T::mSync.Enter();
 		}
 
-		~CThreadSync(VOID)
+		~ThreadSync(VOID)
 		{
 			T::mSync.Leave();
 		}
 	};
 
 private:
-	static CCriticalSection mSync;
+	static CriticalSection mSync;
 };
 
 template <class T>
-CCriticalSection CMultiThreadSync<T>::mSync;
+CriticalSection MultiThreadSync<T>::mSync;

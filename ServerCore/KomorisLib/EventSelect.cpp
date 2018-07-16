@@ -4,13 +4,13 @@
 
 DWORD WINAPI SelectThreadCallback(LPVOID parameter)
 {
-	CEventSelect *Owner = (CEventSelect*)parameter;
+	EventSelect *Owner = (EventSelect*)parameter;
 	Owner->SelectThreadCallback();
 
 	return 0;
 }
 
-VOID CEventSelect::SelectThreadCallback(VOID)
+VOID EventSelect::SelectThreadCallback(VOID)
 {
 	// 네트워크 이벤트를 관리하는 변수
 	WSANETWORKEVENTS	NetworkEvents;
@@ -65,7 +65,7 @@ VOID CEventSelect::SelectThreadCallback(VOID)
 	}
 }
 
-CEventSelect::CEventSelect(VOID)
+EventSelect::EventSelect(VOID)
 {
 	mSelectEventHandle = NULL;
 	mDestroyEventHandle = NULL;
@@ -75,11 +75,11 @@ CEventSelect::CEventSelect(VOID)
 	mSocket = NULL;
 }
 
-CEventSelect::~CEventSelect(VOID)
+EventSelect::~EventSelect(VOID)
 {
 }
 
-BOOL CEventSelect::Begin(SOCKET socket)
+BOOL EventSelect::Begin(SOCKET socket)
 {
 	if (!socket)
 		return FALSE;
@@ -137,7 +137,7 @@ BOOL CEventSelect::Begin(SOCKET socket)
 	return TRUE;
 }
 
-BOOL CEventSelect::End(VOID)
+BOOL EventSelect::End(VOID)
 {
 	if (!mSocket)
 		return FALSE;

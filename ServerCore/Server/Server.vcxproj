@@ -152,7 +152,7 @@
     <ClInclude Include="ConnectedSession.h" />
     <ClInclude Include="DBManager.h" />
     <ClInclude Include="PacketProtocol.h" />
-    <ClInclude Include="ServerIocp.h" />
+    <ClInclude Include="IOCPServer.h" />
     <ClInclude Include="SessionManager.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -160,8 +160,8 @@
     <ClCompile Include="ConnectedSession.cpp" />
     <ClCompile Include="DBManager.cpp" />
     <ClCompile Include="ProcessProtocol.cpp" />
-    <ClCompile Include="Server.cpp" />
-    <ClCompile Include="ServerIocp.cpp" />
+    <ClCompile Include="ServerMain.cpp" />
+    <ClCompile Include="IOCPServer.cpp" />
     <ClCompile Include="SessionManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

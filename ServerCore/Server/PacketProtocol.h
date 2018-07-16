@@ -4,10 +4,31 @@ typedef enum _PROTOCOL
 {
 	PT_VERSION = 0x1000000,
 	PT_SIGNUP,
+	PT_SIGNUP_SUCC,
+	PT_SIGNUP_FAIL,
 	PT_LOGIN,
+	PT_LOGIN_SUCC,
+	PT_LOGIN_FAIL,
 	PT_CHAT,
 	PT_END
 } PROTOCOL;
+
+typedef enum _ERROR_CODE
+{
+	EC_SIGNUP_ID_ALREADY_REGIST = 1,
+	EC_SIGNUP_NAME_ALREADY_REGIST,
+	EC_SIGNUP_ID_ERROR,
+	EC_SIGNUP_PW_ERROR,
+	EC_SIGNUP_NAME_ERROR,
+	EC_LOGIN_ID_AND_PASS_ERROR,
+} ERROR_CODE;
+
+
+/* 
+	///////////////////////////////////////////////////
+						프로토콜 정의 
+	///////////////////////////////////////////////////
+*/
 
 
 /*
@@ -19,20 +40,20 @@ typedef struct _S_PT_SIGNUP
 	WCHAR userPW[20];
 	WCHAR user_name[20];
 } S_PT_SIGNUP;
-
+// SIGNUP_READ
 inline VOID READ_PT_SIGNUP(BYTE *buffer, S_PT_SIGNUP &parameter)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	stream->ReadWCHARs(parameter.userID, 20);
 	stream->ReadWCHARs(parameter.userPW, 20);
 	stream->ReadWCHARs(parameter.user_name, 20);
 }
-
+// SIGNUP_WRITE
 inline DWORD WRITE_PT_SIGNUP(BYTE *buffer, S_PT_SIGNUP &parameter)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	stream->WriteWCHARs(parameter.userID, 20);
@@ -41,10 +62,9 @@ inline DWORD WRITE_PT_SIGNUP(BYTE *buffer, S_PT_SIGNUP &parameter)
 
 	return stream->GetLength();
 }
-
 inline DWORD WRITE_PT_SIGNUP(BYTE *buffer, WCHAR *id, WCHAR *password, WCHAR *name)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	WCHAR _id[20] = { 0, };
@@ -60,6 +80,73 @@ inline DWORD WRITE_PT_SIGNUP(BYTE *buffer, WCHAR *id, WCHAR *password, WCHAR *na
 	return stream->GetLength();
 }
 
+
+/*
+	PT_SIGNUP_SUCC
+*/
+typedef struct _S_PT_SIGNUP_SUCC
+{
+
+} S_PT_SIGNUP_SUCC;
+// PT_SIGNUP_SUCC_READ
+inline VOID READ_PT_SIGNUP_SUCC(BYTE *buffer, S_PT_SIGNUP_SUCC &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+}
+// SIGNUP_SUCC_WRITE
+inline DWORD WRITE_PT_SIGNUP_SUCC(BYTE *buffer, S_PT_SIGNUP_SUCC &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	return stream->GetLength();
+}
+inline DWORD WRITE_PT_SIGNUP_SUCC(BYTE *buffer)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	return stream->GetLength();
+}
+
+
+/*
+	PT_SIGNUP_FAIL
+*/
+typedef struct _S_PT_SIGNUP_FAIL
+{
+	DWORD errorCode;
+} S_PT_SIGNUP_FAIL;
+// SIGNUP_FAIL_READ
+inline VOID READ_PT_SIGNUP_FAIL(BYTE *buffer, S_PT_SIGNUP_FAIL &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->ReadDWORD(&parameter.errorCode);
+}
+// SIGNUP_FAIL_WRITE
+inline DWORD WRITE_PT_SIGNUP_FAIL(BYTE *buffer, S_PT_SIGNUP_FAIL &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->WriteDWORD(parameter.errorCode);
+
+	return stream->GetLength();
+}
+inline DWORD WRITE_PT_SIGNUP_FAIL(BYTE *buffer, DWORD errorCode)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->WriteDWORD(errorCode);
+
+	return stream->GetLength();
+}
+
+
 /*
 	PT_LOGIN
 */
@@ -68,19 +155,19 @@ typedef struct _S_PT_LOGIN
 	WCHAR userID[20];
 	WCHAR userPW[20];
 } S_PT_LOGIN;
-
+// LOGIN_READ
 inline VOID READ_PT_LOGIN(BYTE *buffer, S_PT_LOGIN &parameter)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	stream->ReadWCHARs(parameter.userID, 20);
 	stream->ReadWCHARs(parameter.userPW, 20);
 }
-
+// LOGIN_WRITE
 inline DWORD WRITE_PT_LOGIN(BYTE *buffer, S_PT_LOGIN &parameter)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	stream->WriteWCHARs(parameter.userID, 20);
@@ -88,10 +175,9 @@ inline DWORD WRITE_PT_LOGIN(BYTE *buffer, S_PT_LOGIN &parameter)
 
 	return stream->GetLength();
 }
-
 inline DWORD WRITE_PT_LOGIN(BYTE *buffer, WCHAR *id, WCHAR *password)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	WCHAR _id[20] = { 0, };
@@ -104,6 +190,85 @@ inline DWORD WRITE_PT_LOGIN(BYTE *buffer, WCHAR *id, WCHAR *password)
 	return stream->GetLength();
 }
 
+
+/*
+	PT_LOGIN_SUCC
+*/
+typedef struct _S_PT_LOGIN_SUCC
+{
+	WCHAR user_name[20];
+	INT32 LifePoint;
+} S_PT_LOGIN_SUCC;
+// LOGIN_SUCC_READ
+inline VOID READ_PT_LOGIN_SUCC(BYTE *buffer, S_PT_LOGIN_SUCC &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->ReadWCHARs(parameter.user_name, 20);
+	stream->ReadInt32(&parameter.LifePoint);
+}
+// LOGIN_SUCC_WRITE
+inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, S_PT_LOGIN_SUCC &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->WriteWCHARs(parameter.user_name, 20);
+	stream->WriteInt32(parameter.LifePoint);
+
+	return stream->GetLength();
+}
+inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, WCHAR *name, INT lifePoint)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	WCHAR _name[20] = { 0, };
+	_tcsncpy(_name, name, 20);
+	stream->WriteWCHARs(_name, 20);
+	stream->WriteInt32(lifePoint);
+
+	return stream->GetLength();
+}
+
+
+/*
+	PT_LOGIN_FAIL
+*/
+typedef struct _S_PT_LOGIN_FAIL
+{
+	DWORD errorCode;
+} S_PT_LOGIN_FAIL;
+// LOGIN_FAIL_READ
+inline VOID READ_PT_LOGIN_FAIL(BYTE *buffer, S_PT_LOGIN_FAIL &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->ReadDWORD(&parameter.errorCode);
+}
+// LOGIN_FAIL_WRITE
+inline DWORD WRITE_PT_LOGIN_FAIL(BYTE *buffer, S_PT_LOGIN_FAIL &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->WriteDWORD(parameter.errorCode);
+
+	return stream->GetLength();
+}
+inline DWORD WRITE_PT_LOGIN_FAIL(BYTE *buffer, DWORD errorCode)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	stream->WriteDWORD(errorCode);
+
+	return stream->GetLength();
+}
+
+
  /* 
 	PT_CHAT 
  */
@@ -112,19 +277,19 @@ typedef struct _S_PT_CHAT
 	WCHAR user_name[20];
 	WCHAR message[40];
 } S_PT_CHAT;
-
+// CHAT_READ
 inline VOID READ_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	stream->ReadWCHARs(parameter.user_name, 20);
 	stream->ReadWCHARs(parameter.message, 40);
 }
-
+// CHAT_WRITE
 inline DWORD WRITE_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	stream->WriteWCHARs(parameter.user_name, 20);
@@ -132,10 +297,9 @@ inline DWORD WRITE_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
 
 	return stream->GetLength();
 }
-
 inline DWORD WRITE_PT_CHAT(BYTE *buffer, WCHAR *name, WCHAR *message)
 {
-	CStreamSP stream;
+	StreamSP stream;
 	stream->SetBuffer(buffer);
 
 	WCHAR _name[20] = { 0, };

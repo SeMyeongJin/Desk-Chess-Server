@@ -1,6 +1,6 @@
 #pragma once
 
-class CCrypt
+class Crypt
 {
 public:
 	static BOOL Encrypt(BYTE *source, BYTE *destination, DWORD length);

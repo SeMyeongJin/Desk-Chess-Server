@@ -6,13 +6,13 @@
 
 DWORD WINAPI ReliableUdpThreadCallback(LPVOID parameter)
 {
-	CNetworkSession *Owner = (CNetworkSession*)parameter;
+	NetworkSession *Owner = (NetworkSession*)parameter;
 	Owner->ReliableUdpThreadCallback();
 
 	return 0;
 }
 
-CNetworkSession::CNetworkSession(void)
+NetworkSession::NetworkSession(void)
 {
 	// Accept 관련 Overlapped구조체
 	ZeroMemory(&mAcceptOverlapped, sizeof(mAcceptOverlapped));
@@ -43,11 +43,11 @@ CNetworkSession::CNetworkSession(void)
 	mWriteOverlapped.object = this;	// 현재 개체의 포인터를 가지고 있습니다.
 }
 
-CNetworkSession::~CNetworkSession(void)
+NetworkSession::~NetworkSession(void)
 {
 }
 
-VOID CNetworkSession::ReliableUdpThreadCallback(VOID)
+VOID NetworkSession::ReliableUdpThreadCallback(VOID)
 {
 	DWORD				EventID = 0;
 	HANDLE				ThreadEvents[2] = { mReliableUdpThreadDestroyEvent, mReliableUdpThreadWakeUpEvent };
@@ -96,9 +96,9 @@ VOID CNetworkSession::ReliableUdpThreadCallback(VOID)
 	}
 }
 
-BOOL CNetworkSession::Begin(VOID)
+BOOL NetworkSession::Begin(VOID)
 {
-	CThreadSync sync; // 다중 스레드 동기화
+	ThreadSync sync; // 다중 스레드 동기화
 
 	if (mSocket) // 실행중인 소켓이 있으면 실패
 		return FALSE;
@@ -119,9 +119,9 @@ BOOL CNetworkSession::Begin(VOID)
 	return TRUE;
 }
 
-BOOL CNetworkSession::End(VOID)
+BOOL NetworkSession::End(VOID)
 {
-	CThreadSync sync; // 다중 스레드 동기화
+	ThreadSync sync; // 다중 스레드 동기화
 
 	if (!mSocket)
 		return FALSE;
@@ -159,9 +159,9 @@ BOOL CNetworkSession::End(VOID)
 	return TRUE;
 }
 
-BOOL CNetworkSession::Listen(USHORT port, INT backLog)
+BOOL NetworkSession::Listen(USHORT port, INT backLog)
 {
-	CThreadSync Sync;	// 동기화 개체
+	ThreadSync Sync;	// 동기화 개체
 
 	if (port <= 0 || backLog <= 0)
 		return FALSE;
@@ -205,9 +205,9 @@ BOOL CNetworkSession::Listen(USHORT port, INT backLog)
 	return TRUE;
 }
 
-BOOL CNetworkSession::Accept(SOCKET listenSocket)
+BOOL NetworkSession::Accept(SOCKET listenSocket)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!listenSocket)
 		return FALSE;
@@ -247,9 +247,9 @@ BOOL CNetworkSession::Accept(SOCKET listenSocket)
 	return TRUE;
 }
 
-BOOL CNetworkSession::InitializeReadForIocp(VOID)
+BOOL NetworkSession::InitializeReadForIocp(VOID)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -279,9 +279,9 @@ BOOL CNetworkSession::InitializeReadForIocp(VOID)
 	return TRUE;
 }
 
-BOOL CNetworkSession::ReadForIocp(BYTE* data, DWORD &dataLength)
+BOOL NetworkSession::ReadForIocp(BYTE* data, DWORD &dataLength)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -295,9 +295,9 @@ BOOL CNetworkSession::ReadForIocp(BYTE* data, DWORD &dataLength)
 	return TRUE;
 }
 
-BOOL CNetworkSession::ReadForEventSelect(BYTE* data, DWORD &dataLength)
+BOOL NetworkSession::ReadForEventSelect(BYTE* data, DWORD &dataLength)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -334,9 +334,9 @@ BOOL CNetworkSession::ReadForEventSelect(BYTE* data, DWORD &dataLength)
 	return TRUE;
 }
 
-BOOL CNetworkSession::Write(BYTE* data, DWORD dataLength)
+BOOL NetworkSession::Write(BYTE* data, DWORD dataLength)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -368,9 +368,9 @@ BOOL CNetworkSession::Write(BYTE* data, DWORD dataLength)
 	return TRUE;
 }
 
-BOOL CNetworkSession::Connect(LPSTR address, USHORT port)
+BOOL NetworkSession::Connect(LPSTR address, USHORT port)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (!address || port <= 0)
 		return FALSE;
@@ -400,9 +400,9 @@ BOOL CNetworkSession::Connect(LPSTR address, USHORT port)
 }
 
 // UDP를 사용하기 위한 bind
-BOOL CNetworkSession::UdpBind(USHORT port)
+BOOL NetworkSession::UdpBind(USHORT port)
 {
-	CThreadSync sync;
+	ThreadSync sync;
 
 	if (mSocket)
 		return FALSE;
@@ -472,9 +472,9 @@ BOOL CNetworkSession::UdpBind(USHORT port)
 	return TRUE;
 }
 
-BOOL CNetworkSession::TcpBind(VOID)
+BOOL NetworkSession::TcpBind(VOID)
 {
-	CThreadSync Sync; // 동기화 개체
+	ThreadSync Sync; // 동기화 개체
 
 	if (mSocket)
 		return FALSE;
@@ -492,9 +492,9 @@ BOOL CNetworkSession::TcpBind(VOID)
 	return TRUE;
 }
 
-BOOL CNetworkSession::GetLocalIP(WCHAR* pIP)
+BOOL NetworkSession::GetLocalIP(WCHAR* pIP)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -523,9 +523,9 @@ BOOL CNetworkSession::GetLocalIP(WCHAR* pIP)
 	return FALSE;
 }
 
-USHORT CNetworkSession::GetLocalPort(VOID)
+USHORT NetworkSession::GetLocalPort(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return 0;
@@ -540,9 +540,9 @@ USHORT CNetworkSession::GetLocalPort(VOID)
 	return 0;
 }
 
-BOOL CNetworkSession::InitializeReadFromForIocp(VOID)
+BOOL NetworkSession::InitializeReadFromForIocp(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -575,9 +575,9 @@ BOOL CNetworkSession::InitializeReadFromForIocp(VOID)
 	return TRUE;
 }
 
-BOOL CNetworkSession::ReadFromForIocp(LPSTR remoteAddress, USHORT &remotePort, BYTE *data, DWORD &dataLength)
+BOOL NetworkSession::ReadFromForIocp(LPSTR remoteAddress, USHORT &remotePort, BYTE *data, DWORD &dataLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -609,9 +609,9 @@ BOOL CNetworkSession::ReadFromForIocp(LPSTR remoteAddress, USHORT &remotePort, B
 	return TRUE;
 }
 
-BOOL CNetworkSession::ReadFromForEventSelect(LPSTR remoteAddress, USHORT &remotePort, BYTE *data, DWORD &dataLength)
+BOOL NetworkSession::ReadFromForEventSelect(LPSTR remoteAddress, USHORT &remotePort, BYTE *data, DWORD &dataLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -672,9 +672,9 @@ BOOL CNetworkSession::ReadFromForEventSelect(LPSTR remoteAddress, USHORT &remote
 	return TRUE;
 }
 
-BOOL CNetworkSession::WriteTo(LPCSTR remoteAddress, USHORT remotePort, BYTE *data, DWORD dataLength)
+BOOL NetworkSession::WriteTo(LPCSTR remoteAddress, USHORT remotePort, BYTE *data, DWORD dataLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -694,9 +694,9 @@ BOOL CNetworkSession::WriteTo(LPCSTR remoteAddress, USHORT remotePort, BYTE *dat
 	return TRUE;
 }
 
-BOOL CNetworkSession::WriteTo2(LPSTR remoteAddress, USHORT remotePort, BYTE *data, DWORD dataLength)
+BOOL NetworkSession::WriteTo2(LPSTR remoteAddress, USHORT remotePort, BYTE *data, DWORD dataLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!mSocket)
 		return FALSE;
@@ -738,9 +738,9 @@ BOOL CNetworkSession::WriteTo2(LPSTR remoteAddress, USHORT remotePort, BYTE *dat
 	return TRUE;
 }
 
-BOOL CNetworkSession::GetRemoteAddressAfterAccept(LPTSTR remoteAddress, USHORT &remotePort)
+BOOL NetworkSession::GetRemoteAddressAfterAccept(LPTSTR remoteAddress, USHORT &remotePort)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!remoteAddress)
 		return FALSE;
@@ -776,9 +776,9 @@ BOOL CNetworkSession::GetRemoteAddressAfterAccept(LPTSTR remoteAddress, USHORT &
 	return TRUE;
 }
 
-SOCKET CNetworkSession::GetSocket(VOID)
+SOCKET NetworkSession::GetSocket(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	return mSocket;
 }

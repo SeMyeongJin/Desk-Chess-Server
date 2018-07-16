@@ -1,11 +1,11 @@
 #pragma once
 
 
-class CEventSelect
+class EventSelect
 {
 public:
-	CEventSelect(VOID);
-	virtual ~CEventSelect(VOID);
+	EventSelect(VOID);
+	virtual ~EventSelect(VOID);
 
 private:
 	HANDLE			mSelectEventHandle;		// 家南 捞亥飘甫 包府

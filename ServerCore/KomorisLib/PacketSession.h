@@ -7,11 +7,11 @@ typedef struct _READ_PACKET_INFO
 	DWORD		packetNumber;
 }READ_PACKET_INFO;
 
-class CPacketSession : public CNetworkSession
+class PacketSession : public NetworkSession
 {
 public:
-	CPacketSession(VOID);
-	virtual ~CPacketSession(VOID);
+	PacketSession(VOID);
+	virtual ~PacketSession(VOID);
 
 private:
 	BYTE								mPacketBuffer[MAX_BUFFER_LENGTH * 3];
@@ -20,7 +20,7 @@ private:
 
 	DWORD								mLastReadPacketNumber;
 
-	CCircularQueue						WriteQueue;
+	CircularQueue						WriteQueue;
 
 	//std::map<std::string, DWORD>		mLastReadPacketInfoMapForUdp;
 	std::vector<READ_PACKET_INFO>		mLastReadPacketInfoVectorForUdp;

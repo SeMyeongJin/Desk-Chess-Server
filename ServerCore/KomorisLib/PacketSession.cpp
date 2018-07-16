@@ -6,7 +6,7 @@
 #include "NetworkSession.h"
 #include "PacketSession.h"
 
-CPacketSession::CPacketSession(VOID)
+PacketSession::PacketSession(VOID)
 {
 	// 패킷 확인을 위해서 저장하는 mPacketBuffer
 	ZeroMemory(mPacketBuffer, sizeof(mPacketBuffer));
@@ -17,13 +17,13 @@ CPacketSession::CPacketSession(VOID)
 	mLastReadPacketNumber = 0; // 마지막으로 받은 패킷 번호
 }
 
-CPacketSession::~CPacketSession(VOID)
+PacketSession::~PacketSession(VOID)
 {
 }
 
-BOOL CPacketSession::Begin(VOID)
+BOOL PacketSession::Begin(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	memset(mPacketBuffer, 0, sizeof(mPacketBuffer));
 
@@ -34,25 +34,25 @@ BOOL CPacketSession::Begin(VOID)
 	if (!WriteQueue.Begin())
 		return FALSE;
 
-	return CNetworkSession::Begin();
+	return NetworkSession::Begin();
 }
 
-BOOL CPacketSession::End(VOID)
+BOOL PacketSession::End(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	mLastReadPacketInfoVectorForUdp.clear();
 
 	if (!WriteQueue.End())
 		return FALSE;
 
-	return CNetworkSession::End();
+	return NetworkSession::End();
 }
 
 // 받은 패킷을 분석하는 함수
-BOOL CPacketSession::GetPacket(DWORD &protocol, BYTE *packet, DWORD &packetLength)
+BOOL PacketSession::GetPacket(DWORD &protocol, BYTE *packet, DWORD &packetLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!packet)
 		return FALSE;
@@ -71,7 +71,7 @@ BOOL CPacketSession::GetPacket(DWORD &protocol, BYTE *packet, DWORD &packetLengt
 
 	if (PacketLength <= mRemainLength)
 	{
-		CCrypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
+		Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
 			mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
 			PacketLength - sizeof(DWORD)/*LENGTH*/);
 
@@ -118,9 +118,9 @@ BOOL CPacketSession::GetPacket(DWORD &protocol, BYTE *packet, DWORD &packetLengt
 	return FALSE;
 }
 
-BOOL CPacketSession::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &protocol, BYTE *packet, DWORD &packetLength)
+BOOL PacketSession::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &protocol, BYTE *packet, DWORD &packetLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!packet)
 		return FALSE;
@@ -140,7 +140,7 @@ BOOL CPacketSession::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &pr
 
 	if (PacketLength <= mRemainLength)
 	{
-		CCrypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
+		Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
 			mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
 			PacketLength - sizeof(DWORD)/*LENGTH*/);
 
@@ -206,11 +206,11 @@ BOOL CPacketSession::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &pr
 
 // ReadPacketForIocp는 FALSE가 떨어질때 까지 while문을 돌린다.
 // NetworkSession 클래스의 버퍼에서 PacketSession 클래스의 버퍼로 데이터를 복사하는 함수
-BOOL CPacketSession::ReadPacketForIocp(DWORD readLength)
+BOOL PacketSession::ReadPacketForIocp(DWORD readLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
-	if (!CNetworkSession::ReadForIocp(mPacketBuffer + mRemainLength, readLength))
+	if (!NetworkSession::ReadForIocp(mPacketBuffer + mRemainLength, readLength))
 		return FALSE;
 
 	mRemainLength += readLength;
@@ -220,13 +220,13 @@ BOOL CPacketSession::ReadPacketForIocp(DWORD readLength)
 }
 
 // ReadPacketForEventSelect는 FALSE가 떨어질때 까지 while문을 돌린다.
-BOOL CPacketSession::ReadPacketForEventSelect(VOID)
+BOOL PacketSession::ReadPacketForEventSelect(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	DWORD ReadLength = 0;
 
-	if (!CNetworkSession::ReadForEventSelect(mPacketBuffer + mRemainLength, ReadLength))
+	if (!NetworkSession::ReadForEventSelect(mPacketBuffer + mRemainLength, ReadLength))
 		return FALSE;
 
 	mRemainLength += ReadLength;
@@ -236,11 +236,11 @@ BOOL CPacketSession::ReadPacketForEventSelect(VOID)
 }
 
 // ReadPacketForIocp는 FALSE가 떨어질때 까지 while문을 돌린다.
-BOOL CPacketSession::ReadFromPacketForIocp(LPSTR remoteAddress, USHORT &remotePort, DWORD readLength)
+BOOL PacketSession::ReadFromPacketForIocp(LPSTR remoteAddress, USHORT &remotePort, DWORD readLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
-	if (!CNetworkSession::ReadFromForIocp(remoteAddress, remotePort, mPacketBuffer + mRemainLength, readLength))
+	if (!NetworkSession::ReadFromForIocp(remoteAddress, remotePort, mPacketBuffer + mRemainLength, readLength))
 		return FALSE;
 
 	mRemainLength += readLength;
@@ -250,13 +250,13 @@ BOOL CPacketSession::ReadFromPacketForIocp(LPSTR remoteAddress, USHORT &remotePo
 }
 
 // ReadPacketForEventSelect는 FALSE가 떨어질때 까지 while문을 돌린다.
-BOOL CPacketSession::ReadFromPacketForEventSelect(LPSTR remoteAddress, USHORT &remotePort)
+BOOL PacketSession::ReadFromPacketForEventSelect(LPSTR remoteAddress, USHORT &remotePort)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	DWORD ReadLength = 0;
 
-	if (!CNetworkSession::ReadFromForEventSelect(remoteAddress, remotePort, mPacketBuffer + mRemainLength, ReadLength))
+	if (!NetworkSession::ReadFromForEventSelect(remoteAddress, remotePort, mPacketBuffer + mRemainLength, ReadLength))
 		return FALSE;
 
 	mRemainLength += ReadLength;
@@ -266,9 +266,9 @@ BOOL CPacketSession::ReadFromPacketForEventSelect(LPSTR remoteAddress, USHORT &r
 }
 
 // 데이터를 보낼 때 이렇게 넣어서 보낸다.
-BOOL CPacketSession::WritePacket(DWORD protocol, const BYTE *packet, DWORD packetLength)
+BOOL PacketSession::WritePacket(DWORD protocol, const BYTE *packet, DWORD packetLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!packet)
 		return FALSE;
@@ -304,17 +304,17 @@ BOOL CPacketSession::WritePacket(DWORD protocol, const BYTE *packet, DWORD packe
 		sizeof(DWORD)/*PROTOCOL*/,
 		packet, packetLength);
 
-	CCrypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
+	Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
 
 	// WriteQueue를 이용해서 패킷이 전송 완료가 되었을까지 메모리를 살려둔다.
 	BYTE *WriteData = WriteQueue.Push(this, TempBuffer, PacketLength);
 
-	return CNetworkSession::Write(WriteData, PacketLength);
+	return NetworkSession::Write(WriteData, PacketLength);
 }
 
-BOOL CPacketSession::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWORD protocol, const BYTE *packet, DWORD packetLength)
+BOOL PacketSession::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWORD protocol, const BYTE *packet, DWORD packetLength)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	if (!packet)
 		return FALSE;
@@ -350,25 +350,25 @@ BOOL CPacketSession::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWOR
 		sizeof(DWORD)/*PROTOCOL*/,
 		packet, packetLength);
 
-	CCrypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
+	Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
 
 	// WriteQueue를 이용해서 패킷이 전송 완료가 되었을까지 메모리를 살려둔다.
 	BYTE *WriteData = WriteQueue.Push(this, TempBuffer, PacketLength);
 
-	return CNetworkSession::WriteTo(remoteAddress, remotePort, WriteData, PacketLength);
+	return NetworkSession::WriteTo(remoteAddress, remotePort, WriteData, PacketLength);
 }
 
-BOOL CPacketSession::WriteComplete(VOID)
+BOOL PacketSession::WriteComplete(VOID)
 {
-	CThreadSync Sync;
+	ThreadSync Sync;
 
 	// WriteQueue에서 Pop을 해 주면 된다.
 	return WriteQueue.Pop();
 }
 
-BOOL CPacketSession::ResetUdp(VOID)
+BOOL PacketSession::ResetUdp(VOID)
 {
-	CThreadSync	Sync;
+	ThreadSync	Sync;
 
 	mLastReadPacketInfoVectorForUdp.clear();
 

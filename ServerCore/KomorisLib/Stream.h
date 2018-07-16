@@ -1,10 +1,10 @@
 #pragma once
 
-class CStream : public CMemoryPool<CStream>
+class Stream : public MemoryPool<Stream>
 {
 public:
-	CStream(VOID);
-	~CStream(VOID);
+	Stream(VOID);
+	~Stream(VOID);
 
 private:
 	BYTE	*mBufferPointer;
@@ -27,16 +27,16 @@ public:
 	BOOL ReadWCHAR(WCHAR *data);
 	BOOL ReadWCHARs(LPWSTR data, DWORD length);
 
-	BOOL WriteInt32(INT *data);
-	BOOL WriteDWORD(DWORD *data);
-	BOOL WriteDWORD_PTR(DWORD_PTR *data);
-	BOOL WriteByte(BYTE *data);
+	BOOL WriteInt32(INT data);
+	BOOL WriteDWORD(DWORD data);
+	BOOL WriteDWORD_PTR(DWORD_PTR data);
+	BOOL WriteByte(BYTE data);
 	BOOL WriteBytes(BYTE *data, DWORD length);
-	BOOL WriteFloat(FLOAT *data);
-	BOOL WriteInt64(INT64 *data);
-	BOOL WriteUSHORT(USHORT *data);
-	BOOL WriteSHORT(SHORT *data);
-	BOOL WriteBOOL(BOOL *data);
+	BOOL WriteFloat(FLOAT data);
+	BOOL WriteInt64(INT64 data);
+	BOOL WriteUSHORT(USHORT data);
+	BOOL WriteSHORT(SHORT data);
+	BOOL WriteBOOL(BOOL data);
 	BOOL WriteWCHAR(WCHAR data);
 	BOOL WriteWCHARs(LPCWSTR data, DWORD length);
 
@@ -44,15 +44,15 @@ public:
 };
 
 
-class CStreamSP
+class StreamSP
 {
 public:
-	CStreamSP(VOID) { Stream = new CStream(); }
-	~CStreamSP(VOID) { delete Stream; }
+	StreamSP(VOID) { stream = new Stream(); }
+	~StreamSP(VOID) { delete stream; }
 
-	CStream* operator->(VOID) { return Stream; }
-	operator CStream*(VOID) { return Stream; }
+	Stream* operator->(VOID) { return stream; }
+	operator Stream*(VOID) { return stream; }
 
 private:
-	CStream	*Stream;
+	Stream	*stream;
 };

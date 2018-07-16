@@ -1,3 +1,5 @@
 ﻿  ProcessProtocol.cpp
+c:\users\tpaud\documents\visual studio 2015\projects\servercore\server\processprotocol.cpp(15): warning C4101: 'succData': unreferenced local variable
+c:\users\tpaud\documents\visual studio 2015\projects\servercore\server\processprotocol.cpp(23): warning C4101: 'failData': unreferenced local variable
   Server.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\Server.exe
   Server.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\Server.pdb (Full PDB)

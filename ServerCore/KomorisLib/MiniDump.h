@@ -1,6 +1,6 @@
 #pragma once
 
-class CMiniDump
+class MiniDump
 {
 public:
 	static BOOL Begin(VOID);

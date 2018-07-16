@@ -1,14 +1,14 @@
 #pragma once
 
-class CClientSession : public CEventSelect
+class ClientSession : public EventSelect
 {
 public:
-	CClientSession(VOID);
-	virtual ~CClientSession(VOID);
+	ClientSession(VOID);
+	virtual ~ClientSession(VOID);
 
 private:
-	CPacketSession	mSession; // 통신을 담당하는 Session 개체
-	CCircularQueue	mReadPacketQueue; // 받은 패킷을 저장하고 있는 큐
+	PacketSession	mSession; // 통신을 담당하는 Session 개체
+	CircularQueue	mReadPacketQueue; // 받은 패킷을 저장하고 있는 큐
 
 	BOOL			isUdp; // 현재 UDP로 사용 중인지 확인하는 변수
 

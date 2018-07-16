@@ -55,13 +55,13 @@ BOOL DBManager::Begin(VOID)
 	res = mysql_use_result(conn);
 	while ((row = mysql_fetch_row(res)) != NULL)
 	{
-		printf("( %s | %s | %s )\n\n", row[0], row[1], row[2]);
+		printf("( %s | %s | %s | %s )\n\n", row[0], row[1], row[2], row[3]);
 	}
 
 	return TRUE;
 }
 
-BOOL DBManager::RegistUserQuery(WCHAR *id, WCHAR *pw, WCHAR *name)
+BOOL DBManager::RegistUserQuery(WCHAR *id, WCHAR *pw, WCHAR *name, DWORD * errorCode)
 {
 	// wchar to string
 	wstring _wid(id);
@@ -72,12 +72,52 @@ BOOL DBManager::RegistUserQuery(WCHAR *id, WCHAR *pw, WCHAR *name)
 	string _spw(_wpw.begin(), _wpw.end());
 	string _sname(_wname.begin(), _wname.end());
 
-	string query = "INSERT INTO USER VALUE('";
+	string checkErrQuery = "SELECT UserID, UserName from USER";
+	if (mysql_query(conn, checkErrQuery.c_str()) != NULL)
+	{
+		cout << "SELECT UserID from Table error : " << mysql_error(conn) << endl;
+		return FALSE;
+	}
+	res = mysql_store_result(conn);
+	while ((row = mysql_fetch_row(res)) != NULL)
+	{
+		if (_sid == row[0])
+		{
+			*errorCode = EC_SIGNUP_ID_ALREADY_REGIST;
+			return FALSE;
+		}
+		if (_sname == row[1])
+		{
+			*errorCode = EC_SIGNUP_NAME_ALREADY_REGIST;
+			return FALSE;
+		}
+	}
+
+	if (_sid.size() > 20)
+	{
+		*errorCode = EC_SIGNUP_ID_ERROR;
+		return FALSE;
+	}
+
+	if (_spw.size() > 20)
+	{
+		*errorCode = EC_SIGNUP_PW_ERROR;
+		return FALSE;
+	}
+
+	if (_sname.size() > 20)
+	{
+		*errorCode = EC_SIGNUP_NAME_ERROR;
+		return FALSE;
+	}
+
+	string query = "INSERT INTO USER (UserID, UserPassword, UserName) VALUE('";
 	query += _sid;
 	query += "', '";
 	query += _spw;
 	query += "', '";
-	query += _sname + "')";
+	query += _sname;
+	query += "')";
 
 	if (mysql_query(conn, query.c_str()) != NULL)
 	{
@@ -99,9 +139,9 @@ BOOL DBManager::LoginCheckQuery(WCHAR *id, WCHAR *pw)
 	string _sid(_wid.begin(), _wid.end());
 	string _spw(_wpw.begin(), _wpw.end());
 
-	string query = "SELECT * FROM USER WHERE USERID = '";
+	string query = "SELECT * FROM USER WHERE UserID = '";
 	query += _sid;
-	query += "' AND USERPASSWORD = '";
+	query += "' AND UserPassword = '";
 	query += _spw + "'";
 
 	if (mysql_query(conn, query.c_str()) != NULL)
@@ -131,5 +171,36 @@ BOOL DBManager::LoginCheckQuery(WCHAR *id, WCHAR *pw)
 	cout << "Login Success!" << endl;
 
 	// 로그인 성공
+	return TRUE;
+}
+
+BOOL DBManager::LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, INT32 * lifePoint)
+{
+	wstring _wid(id);
+	wstring _wpw(pw);
+
+	string _sid(_wid.begin(), _wid.end());
+	string _spw(_wpw.begin(), _wpw.end());
+	string point;
+
+	string query = "SELECT UserName, LifePoint FROM USER WHERE UserID = '";
+	query += _sid;
+	query += "' and UserPassword = '";
+	query += _spw + "'";
+	
+	if (mysql_query(conn, query.c_str()) != NULL)
+	{
+		cout << "LoadUserData query error : " << mysql_error(conn) << endl;
+		return FALSE;
+	}
+
+	res = mysql_use_result(conn);
+	while ((row = mysql_fetch_row(res)) != NULL)
+	{
+		_tcsncpy(name, (const WCHAR *)row[0], 20);
+		point = row[1];
+		*lifePoint = atoi(point.c_str());
+	}
+
 	return TRUE;
 }

@@ -8,16 +8,16 @@
 #include "ClientSession.h"
 
 
-CClientSession::CClientSession(VOID)
+ClientSession::ClientSession(VOID)
 {
 	isUdp = FALSE;
 }
 
-CClientSession::~CClientSession(VOID)
+ClientSession::~ClientSession(VOID)
 {
 }
 
-BOOL CClientSession::BeginTcp(LPSTR remoteAddress, USHORT remotePort)
+BOOL ClientSession::BeginTcp(LPSTR remoteAddress, USHORT remotePort)
 {
 	if (!remoteAddress || remotePort <= 0)
 		return FALSE;
@@ -36,7 +36,7 @@ BOOL CClientSession::BeginTcp(LPSTR remoteAddress, USHORT remotePort)
 		return FALSE;
 	}
 
-	if (!CEventSelect::Begin(mSession.GetSocket()))
+	if (!EventSelect::Begin(mSession.GetSocket()))
 	{
 		End();
 
@@ -53,7 +53,7 @@ BOOL CClientSession::BeginTcp(LPSTR remoteAddress, USHORT remotePort)
 	return TRUE;
 }
 
-BOOL CClientSession::BeginUdp(USHORT remotePort)
+BOOL ClientSession::BeginUdp(USHORT remotePort)
 {
 #if defined(_EXTERNAL_RELEASE_)
 	if (remotePort <= 0)
@@ -74,7 +74,7 @@ BOOL CClientSession::BeginUdp(USHORT remotePort)
 		return FALSE;
 	}
 
-	if (!CEventSelect::Begin(mSession.GetSocket()))
+	if (!EventSelect::Begin(mSession.GetSocket()))
 	{
 		End();
 
@@ -86,40 +86,40 @@ BOOL CClientSession::BeginUdp(USHORT remotePort)
 	return TRUE;
 }
 
-BOOL CClientSession::End(VOID)
+BOOL ClientSession::End(VOID)
 {
 	mSession.End();
 
-	CEventSelect::End();
+	EventSelect::End();
 
 	return TRUE;
 }
 
-BOOL CClientSession::GetLocalIP(WCHAR* pIP)
+BOOL ClientSession::GetLocalIP(WCHAR* pIP)
 {
 	return mSession.GetLocalIP(pIP);
 }
 
-USHORT CClientSession::GetLocalPort(VOID)
+USHORT ClientSession::GetLocalPort(VOID)
 {
 	return mSession.GetLocalPort();
 }
 
-BOOL CClientSession::ReadPacket(DWORD &protocol, BYTE *packet, DWORD &packetLength)
+BOOL ClientSession::ReadPacket(DWORD &protocol, BYTE *packet, DWORD &packetLength)
 {
 	VOID *object = NULL;
 
 	return mReadPacketQueue.Pop(&object, protocol, packet, packetLength);
 }
 
-BOOL CClientSession::ReadFromPacket(DWORD &protocol, LPSTR remoteAddress, USHORT &remotePort, BYTE *packet, DWORD &packetLength)
+BOOL ClientSession::ReadFromPacket(DWORD &protocol, LPSTR remoteAddress, USHORT &remotePort, BYTE *packet, DWORD &packetLength)
 {
 	VOID *object = NULL;
 
 	return mReadPacketQueue.Pop(&object, protocol, packet, packetLength, remoteAddress, remotePort);
 }
 
-BOOL CClientSession::WritePacket(DWORD protocol, const BYTE *packet, DWORD packetLength)
+BOOL ClientSession::WritePacket(DWORD protocol, const BYTE *packet, DWORD packetLength)
 {
 	if (!mSession.WritePacket(protocol, packet, packetLength))
 		return FALSE;
@@ -130,7 +130,7 @@ BOOL CClientSession::WritePacket(DWORD protocol, const BYTE *packet, DWORD packe
 	return TRUE;
 }
 
-BOOL CClientSession::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWORD protocol, const BYTE *packet, DWORD packetLength)
+BOOL ClientSession::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWORD protocol, const BYTE *packet, DWORD packetLength)
 {
 	if (!mSession.WriteToPacket(remoteAddress, remotePort, protocol, packet, packetLength))
 		return FALSE;
@@ -141,7 +141,7 @@ BOOL CClientSession::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWOR
 	return TRUE;
 }
 
-VOID CClientSession::OnIoRead(VOID)
+VOID ClientSession::OnIoRead(VOID)
 {
 	BYTE	packet[MAX_BUFFER_LENGTH] = { 0, };
 	DWORD	packetLength = 0;

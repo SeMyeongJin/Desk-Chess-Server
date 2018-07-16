@@ -2,32 +2,32 @@
 #include "Random.h"
 
 
-CRandom::CRandom(VOID)
+Random::Random(VOID)
 {
 }
 
-CRandom::~CRandom(VOID)
+Random::~Random(VOID)
 {
 }
 
-BOOL CRandom::Init(UINT seed)
+BOOL Random::Init(UINT seed)
 {
 	mSeed = seed;
 
 	return TRUE;
 }
 
-INT CRandom::Rand(VOID)
+INT Random::Rand(VOID)
 {
 	return(((mSeed = mSeed * 214013L + 2531011L) >> 16) & 0x7FFF);
 }
 
-INT CRandom::SimpleRandom(VOID)
+INT Random::SimpleRandom(VOID)
 {
 	return(((mSeed = mSeed + 2531011L) >> 3) & 0x7FFF);
 }
 
-INT CRandom::ComplexRandom(VOID)
+INT Random::ComplexRandom(VOID)
 {
 	UINT next = mSeed;
 	INT  result;

@@ -1,6 +1,6 @@
 #pragma once
 
-class CLog
+class Log
 {
 public:
 	// 가변인자 함수, 함수가 호출될 때마다 인수의 개수 및 타입 변경 가능.

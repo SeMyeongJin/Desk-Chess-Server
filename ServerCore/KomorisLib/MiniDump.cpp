@@ -78,7 +78,7 @@ LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-BOOL CMiniDump::Begin(VOID)
+BOOL MiniDump::Begin(VOID)
 {
 	SetErrorMode(SEM_FAILCRITICALERRORS);
 
@@ -87,7 +87,7 @@ BOOL CMiniDump::Begin(VOID)
 	return true;
 }
 
-BOOL CMiniDump::End(VOID)
+BOOL MiniDump::End(VOID)
 {
 	SetUnhandledExceptionFilter(PreviousExceptionFilter);
 
