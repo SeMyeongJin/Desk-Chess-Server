@@ -4,7 +4,7 @@ class SessionManager : public MultiThreadSync<SessionManager>
 {
 public:
 	SessionManager();
-	~SessionManager();
+	virtual ~SessionManager();
 
 private:
 	std::vector<ConnectedSession*> mConnectedSessions;

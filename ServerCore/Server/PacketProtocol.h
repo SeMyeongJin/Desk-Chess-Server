@@ -88,7 +88,7 @@ typedef struct _S_PT_SIGNUP_SUCC
 {
 
 } S_PT_SIGNUP_SUCC;
-// PT_SIGNUP_SUCC_READ
+// SIGNUP_SUCC_READ
 inline VOID READ_PT_SIGNUP_SUCC(BYTE *buffer, S_PT_SIGNUP_SUCC &parameter)
 {
 	StreamSP stream;
@@ -197,7 +197,7 @@ inline DWORD WRITE_PT_LOGIN(BYTE *buffer, WCHAR *id, WCHAR *password)
 typedef struct _S_PT_LOGIN_SUCC
 {
 	WCHAR user_name[20];
-	INT32 LifePoint;
+	DWORD rating;
 } S_PT_LOGIN_SUCC;
 // LOGIN_SUCC_READ
 inline VOID READ_PT_LOGIN_SUCC(BYTE *buffer, S_PT_LOGIN_SUCC &parameter)
@@ -206,7 +206,7 @@ inline VOID READ_PT_LOGIN_SUCC(BYTE *buffer, S_PT_LOGIN_SUCC &parameter)
 	stream->SetBuffer(buffer);
 
 	stream->ReadWCHARs(parameter.user_name, 20);
-	stream->ReadInt32(&parameter.LifePoint);
+	stream->ReadDWORD(&parameter.rating);
 }
 // LOGIN_SUCC_WRITE
 inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, S_PT_LOGIN_SUCC &parameter)
@@ -215,11 +215,11 @@ inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, S_PT_LOGIN_SUCC &parameter)
 	stream->SetBuffer(buffer);
 
 	stream->WriteWCHARs(parameter.user_name, 20);
-	stream->WriteInt32(parameter.LifePoint);
+	stream->WriteDWORD(parameter.rating);
 
 	return stream->GetLength();
 }
-inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, WCHAR *name, INT lifePoint)
+inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, WCHAR *name, DWORD ratingPoint)
 {
 	StreamSP stream;
 	stream->SetBuffer(buffer);
@@ -227,7 +227,7 @@ inline DWORD WRITE_PT_LOGIN_SUCC(BYTE *buffer, WCHAR *name, INT lifePoint)
 	WCHAR _name[20] = { 0, };
 	_tcsncpy(_name, name, 20);
 	stream->WriteWCHARs(_name, 20);
-	stream->WriteInt32(lifePoint);
+	stream->WriteDWORD(ratingPoint);
 
 	return stream->GetLength();
 }

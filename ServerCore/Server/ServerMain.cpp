@@ -20,7 +20,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	IOCPServer iocpServer;
 	if (iocpServer.Begin())
 	{
-		_tprintf(_T("=============== Start Iocp Server ===============\n"));
+		_tprintf(_T("=============== Start Login Server ===============\n"));
 		getchar();
 		iocpServer.End();
 	}

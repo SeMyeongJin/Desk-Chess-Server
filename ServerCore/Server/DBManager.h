@@ -3,7 +3,7 @@ class DBManager
 {
 public:
 	DBManager();
-	~DBManager();
+	virtual ~DBManager();
 
 public:
 	BOOL Begin(VOID);
@@ -13,7 +13,7 @@ public:
 	// 로그인 체크 쿼리
 	BOOL LoginCheckQuery(WCHAR *id, WCHAR *pw);
 	// 유저 데이터 로드 쿼리
-	BOOL LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, INT * lifePoint);
+	BOOL LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, DWORD * lifePoint);
 
 private:
 	const char * DB_HOST;

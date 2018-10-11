@@ -8,6 +8,7 @@ UserInfo::UserInfo()
 	ZeroMemory(mNickName, sizeof(mNickName));
 	mLifePoint				= 0;
 	mStatus					= US_NONE;
+	mEnteredRoom			= NULL;
 
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
@@ -33,6 +34,7 @@ BOOL UserInfo::Begin(VOID)
 	ZeroMemory(mNickName, sizeof(mNickName));
 	mLifePoint				= 0;
 	mStatus					= US_NONE;
+	mEnteredRoom			= NULL;
 
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
@@ -54,6 +56,7 @@ BOOL UserInfo::End(VOID)
 	ZeroMemory(mNickName, sizeof(mNickName));
 	mLifePoint				= 0;
 	mStatus					= US_NONE;
+	mEnteredRoom			= NULL;
 
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;

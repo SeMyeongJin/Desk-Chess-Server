@@ -55,7 +55,7 @@ BOOL DBManager::Begin(VOID)
 	res = mysql_use_result(conn);
 	while ((row = mysql_fetch_row(res)) != NULL)
 	{
-		printf("( %s | %s | %s | %s )\n\n", row[0], row[1], row[2], row[3]);
+		printf("( %s | %s | %s | %s | %s | %s )\n\n", row[0], row[1], row[2], row[3], row[4], row[5]);
 	}
 
 	return TRUE;
@@ -174,7 +174,7 @@ BOOL DBManager::LoginCheckQuery(WCHAR *id, WCHAR *pw)
 	return TRUE;
 }
 
-BOOL DBManager::LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, INT32 * lifePoint)
+BOOL DBManager::LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, DWORD * lifePoint)
 {
 	wstring _wid(id);
 	wstring _wpw(pw);
@@ -183,7 +183,7 @@ BOOL DBManager::LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, INT32 * lifePoin
 	string _spw(_wpw.begin(), _wpw.end());
 	string point;
 
-	string query = "SELECT UserName, LifePoint FROM USER WHERE UserID = '";
+	string query = "SELECT UserName, Rating FROM USER WHERE UserID = '";
 	query += _sid;
 	query += "' and UserPassword = '";
 	query += _spw + "'";
@@ -199,7 +199,7 @@ BOOL DBManager::LoadUserData(WCHAR *id, WCHAR *pw, WCHAR *name, INT32 * lifePoin
 	{
 		_tcsncpy(name, (const WCHAR *)row[0], 20);
 		point = row[1];
-		*lifePoint = atoi(point.c_str());
+		*lifePoint = atol(point.c_str());
 	}
 
 	return TRUE;

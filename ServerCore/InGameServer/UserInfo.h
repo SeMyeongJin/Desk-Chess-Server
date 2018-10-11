@@ -1,4 +1,7 @@
 #pragma once
+
+class GameRoom;
+
 class UserInfo : public PacketWrapping
 {
 public:
@@ -12,6 +15,8 @@ private:
 
 	USER_STATUS			mStatus;
 
+	GameRoom*			mEnteredRoom;
+	
 	BOOL				mIsConnected;
 
 private:
@@ -41,12 +46,12 @@ public:
 		mTowerHP = TOWER_HP;
 		return TRUE;
 	}
-	inline INT64 GetGameGold(VOID)								{ ThreadSync sync; return mGameGold; }
-	inline INT64 GetSpaceShipHP(VOID)							{ ThreadSync sync; return mSpaceShipHP; }
-	inline INT64 GetTowerHP(VOID)								{ ThreadSync sync; return mTowerHP; }
-	inline BOOL  SetGameGold(INT64 gold)						{ ThreadSync sync; mGameGold = gold; return TRUE; }
-	inline BOOL  SetSpaceShipHP(INT64 hp)						{ ThreadSync sync; mSpaceShipHP = hp; return TRUE; }
-	inline BOOL  SetTowerHP(INT64 hp)							{ ThreadSync sync; mTowerHP = hp; return TRUE; }
+	inline DWORD GetGameGold(VOID)								{ ThreadSync sync; return mGameGold; }
+	inline DWORD GetSpaceShipHP(VOID)							{ ThreadSync sync; return mSpaceShipHP; }
+	inline DWORD GetTowerHP(VOID)								{ ThreadSync sync; return mTowerHP; }
+	inline BOOL  SetGameGold(DWORD gold)						{ ThreadSync sync; mGameGold = gold; return TRUE; }
+	inline BOOL  SetSpaceShipHP(DWORD hp)						{ ThreadSync sync; mSpaceShipHP = hp; return TRUE; }
+	inline BOOL  SetTowerHP(DWORD hp)							{ ThreadSync sync; mTowerHP = hp; return TRUE; }
 	
 	inline BOOL GetIsConnected(VOID)							{ ThreadSync sync; return mIsConnected; }
 	inline BOOL GetIsReady(VOID)								{ ThreadSync sync; return mIsReady; }
@@ -59,10 +64,12 @@ public:
 
 	inline LPTSTR			GetUserID(VOID)						{ ThreadSync sync; return mUserID; }
 	inline LPTSTR			GetNickName(VOID)					{ ThreadSync sync; return mNickName; }
-	inline INT64			GetLifePoint(VOID)					{ ThreadSync sync; return mLifePoint; }
+	inline DWORD			GetLifePoint(VOID)					{ ThreadSync sync; return mLifePoint; }
 	inline USER_STATUS		GetStatus(VOID)						{ ThreadSync sync; return mStatus; }
+	inline GameRoom*		GetEnteredRoom(VOID)				{ ThreadSync sync; return mEnteredRoom; }
 	inline BOOL				SetUserID(LPTSTR userID)			{ ThreadSync sync; _tcsncpy(mUserID, userID, 20); return TRUE; }
 	inline BOOL				SetUserName(LPTSTR userName)		{ ThreadSync sync; _tcsncpy(mNickName, userName, 20); return TRUE; }
-	inline BOOL				SetLifePoint(INT64 lp)				{ ThreadSync sync; mLifePoint = lp; return TRUE; }
+	inline BOOL				SetLifePoint(DWORD lp)				{ ThreadSync sync; mLifePoint = lp; return TRUE; }
 	inline BOOL				SetStatus(USER_STATUS status)		{ ThreadSync sync; mStatus = status; return TRUE; }
+	inline BOOL				SetEnteredRoom(GameRoom *room)		{ ThreadSync sync; mEnteredRoom = room; return TRUE; }
 };

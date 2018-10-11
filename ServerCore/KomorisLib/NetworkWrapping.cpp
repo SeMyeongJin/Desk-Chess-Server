@@ -229,8 +229,8 @@ BOOL NetworkWrapping::Accept(SOCKET listenSocket)
 
 	// AcceptEx사용 (Accept를 사용하면 해당 접속을 처리하는 동안 다른 처리를 할수 없다
 	// 따라서 접속이 몰릴경우 접속 실패를 할수 있으므로 미리 생성된 소캣을 사용하여 Accept처리를 한다)
-	if (!AcceptEx(listenSocket,
-		mSocket,
+	if (!AcceptEx(listenSocket, // 문지기 소켓
+		mSocket,				// 새로 생성된 소켓
 		mReadBuffer,			// recive buffer 
 		0,						// 버퍼 사이즈를 0으로 주어 받지 않음
 		sizeof(sockaddr_in) + 16, // 로컬 주소 (16바이트 커야함)

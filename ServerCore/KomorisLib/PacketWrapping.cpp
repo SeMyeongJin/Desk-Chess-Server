@@ -71,9 +71,9 @@ BOOL PacketWrapping::GetPacket(DWORD &protocol, BYTE *packet, DWORD &packetLengt
 
 	if (PacketLength <= mRemainLength)
 	{
-		Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-			mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-			PacketLength - sizeof(DWORD)/*LENGTH*/);
+		//Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
+		//	mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
+		//	PacketLength - sizeof(DWORD)/*LENGTH*/);
 
 		DWORD PacketNumber = 0;
 		DWORD Protocol = 0;
@@ -140,9 +140,9 @@ BOOL PacketWrapping::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &pr
 
 	if (PacketLength <= mRemainLength)
 	{
-		Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-			mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-			PacketLength - sizeof(DWORD)/*LENGTH*/);
+		//Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
+		//	mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
+		//	PacketLength - sizeof(DWORD)/*LENGTH*/);
 
 		DWORD PacketNumber = 0;
 		DWORD Protocol = 0;
@@ -304,7 +304,7 @@ BOOL PacketWrapping::WritePacket(DWORD protocol, const BYTE *packet, DWORD packe
 		sizeof(DWORD)/*PROTOCOL*/,
 		packet, packetLength);
 
-	Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
+	//Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
 
 	// WriteQueue를 이용해서 패킷이 전송 완료가 되었을까지 메모리를 살려둔다.
 	BYTE *WriteData = WriteQueue.Push(this, TempBuffer, PacketLength);
@@ -350,7 +350,7 @@ BOOL PacketWrapping::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWOR
 		sizeof(DWORD)/*PROTOCOL*/,
 		packet, packetLength);
 
-	Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
+	//Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
 
 	// WriteQueue를 이용해서 패킷이 전송 완료가 되었을까지 메모리를 살려둔다.
 	BYTE *WriteData = WriteQueue.Push(this, TempBuffer, PacketLength);
