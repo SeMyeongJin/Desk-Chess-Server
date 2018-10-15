@@ -1,6 +1,7 @@
 #pragma once
 
 class GameRoom;
+class FriendshipGameRoom;
 
 class UserInfo : public PacketWrapping
 {
@@ -16,7 +17,8 @@ private:
 	USER_STATUS			mStatus;
 
 	GameRoom*			mEnteredRoom;
-	
+	FriendshipGameRoom* mEnteredFriendshipRoom;
+
 	BOOL				mIsConnected;
 
 private:
@@ -67,9 +69,11 @@ public:
 	inline DWORD			GetLifePoint(VOID)					{ ThreadSync sync; return mLifePoint; }
 	inline USER_STATUS		GetStatus(VOID)						{ ThreadSync sync; return mStatus; }
 	inline GameRoom*		GetEnteredRoom(VOID)				{ ThreadSync sync; return mEnteredRoom; }
+	inline FriendshipGameRoom* GetEnteredFriendshipRoom(VOID)	{ ThreadSync sync; return mEnteredFriendshipRoom; }
 	inline BOOL				SetUserID(LPTSTR userID)			{ ThreadSync sync; _tcsncpy(mUserID, userID, 20); return TRUE; }
 	inline BOOL				SetUserName(LPTSTR userName)		{ ThreadSync sync; _tcsncpy(mNickName, userName, 20); return TRUE; }
 	inline BOOL				SetLifePoint(DWORD lp)				{ ThreadSync sync; mLifePoint = lp; return TRUE; }
 	inline BOOL				SetStatus(USER_STATUS status)		{ ThreadSync sync; mStatus = status; return TRUE; }
 	inline BOOL				SetEnteredRoom(GameRoom *room)		{ ThreadSync sync; mEnteredRoom = room; return TRUE; }
+	inline BOOL				SetEnteredFriendshipRoom(FriendshipGameRoom *room) { ThreadSync sync; mEnteredFriendshipRoom = room; return TRUE; }
 };

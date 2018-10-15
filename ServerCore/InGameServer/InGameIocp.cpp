@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "InGameIocp.h"
 
-extern GameDBManager GgameDBManager;
+GameDBManager GgameDBManager;
 
 InGameIocp::InGameIocp()
 {
@@ -73,6 +73,13 @@ BOOL InGameIocp::Begin(VOID)
 		return FALSE;
 	}
 
+	if (!mFriRoomManager.Begin(MAX_USER))
+	{
+		End();
+
+		return FALSE;
+	}
+
 	if (!mUserInfoManager.AcceptALL())
 	{
 		End();
@@ -96,7 +103,8 @@ BOOL InGameIocp::Begin(VOID)
 		return FALSE;
 	}
 
-	//GgameDBManager.Begin();
+	GgameDBManager.Begin();
+
 
 	return TRUE;
 }
@@ -193,10 +201,16 @@ VOID InGameIocp::OnIoRead(VOID *object, DWORD dataLength)
 	{
 		while (userInfo->GetPacket(protocol, packet, packetLength))
 		{
+			if (protocol == PT_REQ_USER_INFO) PROC_PT_REQ_USER_INFO(userInfo, packet);
 			if (protocol == PT_OFFICIAL_GAME_START) PROC_PT_OFFICIAL_GAME_START(userInfo, packet);
 			if (protocol == PT_FRIENDSHIP_GAME_START) PROC_PT_FRIENDSHIP_GAME_START(userInfo, packet);
+			if (protocol == PT_ROOM_LEAVE) PROC_PT_ROOM_LEAVE(userInfo, packet);
 			if (protocol == PT_CHAT) PROC_PT_CHAT(userInfo, packet);
 			if (protocol == PT_PIECE_MOVE) PROC_PT_PIECE_MOVE(userInfo, packet);
+			if (protocol == PT_PIECE_PROMOTION) PROC_PT_PIECE_PROMOTION(userInfo, packet);
+			if (protocol == PT_OFFICIAL_GAME_WIN) PROC_PT_OFFICIAL_GAME_WIN(userInfo, packet);
+			if (protocol == PT_OFFICIAL_GAME_LOSE) PROC_PT_OFFICIAL_GAME_LOSE(userInfo, packet);
+			if (protocol == PT_FRIENDSHIP_GAME_WIN) PROC_PT_FRIENDSHIP_GAME_WIN(userInfo, packet);
 		}
 	}
 

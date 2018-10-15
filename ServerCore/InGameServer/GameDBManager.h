@@ -8,10 +8,14 @@ public:
 public:
 	BOOL Begin(VOID);
 
+	// when users request their infomation
+	BOOL ReqUserInfo(WCHAR *name, DWORD * rating, DWORD * off_win, DWORD * off_lose, DWORD * fri_win);
 	// when user won the game
-	BOOL WinGame(WCHAR *name);
+	BOOL WinOfficialGame(WCHAR *name);
 	// when user lost the game
-	BOOL LoseGame(WCHAR *name);
+	BOOL LoseOfficialGame(WCHAR *name);
+	// when user won friendship game
+	BOOL WinFriendshipGame(WCHAR *name);
 
 private:
 	const char * DB_HOST;

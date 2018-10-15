@@ -9,6 +9,7 @@ UserInfo::UserInfo()
 	mLifePoint				= 0;
 	mStatus					= US_NONE;
 	mEnteredRoom			= NULL;
+	mEnteredFriendshipRoom  = NULL;
 
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
@@ -35,7 +36,7 @@ BOOL UserInfo::Begin(VOID)
 	mLifePoint				= 0;
 	mStatus					= US_NONE;
 	mEnteredRoom			= NULL;
-
+	mEnteredFriendshipRoom  = NULL;
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
 	mIsLoadComplete			= FALSE;
@@ -57,7 +58,7 @@ BOOL UserInfo::End(VOID)
 	mLifePoint				= 0;
 	mStatus					= US_NONE;
 	mEnteredRoom			= NULL;
-
+	mEnteredRoom			= NULL;
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
 	mIsLoadComplete			= FALSE;

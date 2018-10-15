@@ -1,6 +1,21 @@
 #include "stdafx.h"
 #include "InGameIocp.h"
 
+extern GameDBManager GgameDBManager;
+
+VOID InGameIocp::PROC_PT_REQ_USER_INFO(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_REQ_USER_INFO userInfoInputData;
+	READ_PT_REQ_USER_INFO(pPacket, userInfoInputData);
+
+	S_PT_RES_USER_INFO userInfoOutputData;
+	
+	GgameDBManager.ReqUserInfo(userInfoInputData.userName, &userInfoOutputData.Rating, &userInfoOutputData.OFF_WIN, &userInfoOutputData.OFF_LOSE, &userInfoOutputData.FRI_WIN);
+
+	userInfo->WritePacket(PT_RES_USER_INFO, writeBuffer, WRITE_PT_RES_USER_INFO(writeBuffer, userInfoOutputData.Rating, userInfoOutputData.OFF_WIN, userInfoOutputData.OFF_LOSE, userInfoOutputData.FRI_WIN));
+}
+
 VOID InGameIocp::PROC_PT_OFFICIAL_GAME_START(UserInfo * userInfo, BYTE * pPacket)
 {
 	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
@@ -21,8 +36,8 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_START(UserInfo * userInfo, BYTE * pPacket
 			BOOL whiteTeam = true;
 			BOOL blackTeam = false;
 
-			userInfo->WritePacket(PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, whiteTeam));
-			userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, blackTeam));
+			userInfo->WritePacket(PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, whiteTeam, true));
+			userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, blackTeam, true));
 		}
 		else
 			userInfo->WritePacket(PT_OFFICIAL_GAME_START_SUCC, writeBuffer, WRITE_PT_OFFICIAL_GAME_START_SUCC(writeBuffer));
@@ -45,7 +60,7 @@ VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_START(UserInfo * userInfo, BYTE * pPack
 	READ_PT_FRIENDSHIP_GAME_START(pPacket, FGData);
 
 	USHORT slotNumber = 0;
-	GameRoom *room = mRoomManager.QuickJoin(userInfo, slotNumber);
+	FriendshipGameRoom *room = mFriRoomManager.QuickJoin(userInfo, slotNumber);
 	if (room)
 	{
 		if (room->GetIsFull())
@@ -53,15 +68,15 @@ VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_START(UserInfo * userInfo, BYTE * pPack
 			BOOL whiteTeam = true;
 			BOOL blackTeam = false;
 
-			userInfo->WritePacket(PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, whiteTeam));
-			userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, blackTeam));
+			userInfo->WritePacket(PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, whiteTeam, false));
+			userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, blackTeam, false));
 		}
 		else
-			userInfo->WritePacket(PT_FRIENDSHIP_GAME_START_SUCC, writeBuffer, WRITE_PT_OFFICIAL_GAME_START_SUCC(writeBuffer));
+			userInfo->WritePacket(PT_FRIENDSHIP_GAME_START_SUCC, writeBuffer, WRITE_PT_FRIENDSHIP_GAME_START_SUCC(writeBuffer));
 	}
 	else
 	{
-		userInfo->WritePacket(PT_FRIENDSHIP_GAME_START_FAIL, writeBuffer, WRITE_PT_OFFICIAL_GAME_START_FAIL(writeBuffer, EC_CANT_ALLOCATE_ROOM));
+		userInfo->WritePacket(PT_FRIENDSHIP_GAME_START_FAIL, writeBuffer, WRITE_PT_FRIENDSHIP_GAME_START_FAIL(writeBuffer, EC_CANT_ALLOCATE_ROOM));
 	}
 }
 
@@ -75,16 +90,15 @@ VOID InGameIocp::PROC_PT_ROOM_LEAVE(UserInfo * userInfo, BYTE * pPacket)
 	if (room)
 	{
 		room->LeaveUser(FALSE, this, userInfo);
-
-		userInfo->WritePacket(PT_ROOM_LEAVE_SUCC, writeBuffer, WRITE_PT_ROOM_LEAVE_SUCC(writeBuffer));
-
 		userInfo->SetStatus(US_LOBBY_ENTERED);
 	}
-	else
-	{
-		userInfo->WritePacket(PT_ROOM_LEAVE_FAIL, writeBuffer, WRITE_PT_ROOM_LEAVE_FAIL(writeBuffer, EC_CANT_COMPLETE_LEAVE_ROOM));
-	}
 
+	FriendshipGameRoom *friRoom = userInfo->GetEnteredFriendshipRoom();
+	if (friRoom)
+	{
+		friRoom->LeaveUser(FALSE, this, userInfo);
+		userInfo->SetStatus(US_LOBBY_ENTERED);
+	}
 }
 
 VOID InGameIocp::PROC_PT_CHAT(UserInfo * userInfo, BYTE * pPacket)
@@ -105,6 +119,54 @@ VOID InGameIocp::PROC_PT_PIECE_MOVE(UserInfo * userInfo, BYTE * pPacket)
 	S_PT_PIECE_MOVE moveData;
 	READ_PT_PIECE_MOVE(pPacket, moveData);
 
-	printf("%d, %d, %d, %d", moveData.beforeMoveXpos, moveData.beforeMoveYpos, moveData.afterMoveXpos, moveData.afterMoveYpos);
-	userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_PIECE_MOVE, writeBuffer, WRITE_PT_PIECE_MOVE(writeBuffer, moveData.beforeMoveXpos, moveData.beforeMoveYpos, moveData.afterMoveXpos, moveData.afterMoveYpos));
+	if (userInfo->GetEnteredRoom())
+	{
+		userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_PIECE_MOVE, writeBuffer, WRITE_PT_PIECE_MOVE(writeBuffer, moveData.beforeMoveXpos, moveData.beforeMoveYpos, moveData.afterMoveXpos, moveData.afterMoveYpos));
+	}
+	if (userInfo->GetEnteredFriendshipRoom())
+	{
+		userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_PIECE_MOVE, writeBuffer, WRITE_PT_PIECE_MOVE(writeBuffer, moveData.beforeMoveXpos, moveData.beforeMoveYpos, moveData.afterMoveXpos, moveData.afterMoveYpos));
+	}
+}
+VOID InGameIocp::PROC_PT_PIECE_PROMOTION(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_PIECE_PROMOTION promotionData;
+	READ_PT_PIECE_PROMOTION(pPacket, promotionData);
+
+	if (userInfo->GetEnteredRoom())
+	{
+		userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_PIECE_PROMOTION, writeBuffer, WRITE_PT_PIECE_PROMOTION(writeBuffer, promotionData.pieceType, promotionData.xpos, promotionData.ypos));
+	}
+	if (userInfo->GetEnteredFriendshipRoom())
+	{
+		userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_PIECE_PROMOTION, writeBuffer, WRITE_PT_PIECE_PROMOTION(writeBuffer, promotionData.pieceType, promotionData.xpos, promotionData.ypos));
+	}
+}
+
+VOID InGameIocp::PROC_PT_OFFICIAL_GAME_WIN(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_OFFICIAL_GAME_WIN winData;
+	READ_PT_OFFICIAL_GAME_WIN(pPacket, winData);
+
+	GgameDBManager.WinOfficialGame(winData.userName);
+}
+
+VOID InGameIocp::PROC_PT_OFFICIAL_GAME_LOSE(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_OFFICIAL_GAME_LOSE loseData;
+	READ_PT_OFFICIAL_GAME_LOSE(pPacket, loseData);
+
+	GgameDBManager.LoseOfficialGame(loseData.userName);
+}
+
+VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_WIN(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_FRIENDSHIP_GAME_WIN winData;
+	READ_PT_FRIENDSHIP_GAME_WIN(pPacket, winData);
+
+	GgameDBManager.WinFriendshipGame(winData.userName);
 }

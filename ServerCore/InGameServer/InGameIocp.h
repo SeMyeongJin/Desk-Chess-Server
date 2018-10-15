@@ -10,6 +10,7 @@ private:
 	UserInfoManager mUserInfoManager;
 
 	GameRoomManager mRoomManager;
+	FriGameRoomManager mFriRoomManager;
 
 	HANDLE mGameThreadHandle;
 	HANDLE mGameThreadDestroyEvent;
@@ -30,9 +31,14 @@ private:
 	/*
 		TODO: 패킷 프로세스 처리
 	*/
+	VOID PROC_PT_REQ_USER_INFO(UserInfo * userInfo, BYTE * pPacket);
 	VOID PROC_PT_OFFICIAL_GAME_START(UserInfo * userInfo, BYTE * pPacket);
 	VOID PROC_PT_FRIENDSHIP_GAME_START(UserInfo * userInfo, BYTE * pPacket);
 	VOID PROC_PT_ROOM_LEAVE(UserInfo * userInfo, BYTE * pPacket);
 	VOID PROC_PT_CHAT(UserInfo * userInfo, BYTE * pPacket);
 	VOID PROC_PT_PIECE_MOVE(UserInfo * userInfo, BYTE * pPacket);
+	VOID PROC_PT_PIECE_PROMOTION(UserInfo * userInfo, BYTE * pPacket);
+	VOID PROC_PT_OFFICIAL_GAME_WIN(UserInfo * userInfo, BYTE * pPacket);
+	VOID PROC_PT_OFFICIAL_GAME_LOSE(UserInfo * userInfo, BYTE * pPacket);
+	VOID PROC_PT_FRIENDSHIP_GAME_WIN(UserInfo * userInfo, BYTE * pPacket);
 };

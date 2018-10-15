@@ -144,6 +144,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FriendshipGameRoom.h" />
+    <ClInclude Include="FriGameRoomManager.h" />
     <ClInclude Include="GameDBManager.h" />
     <ClInclude Include="GamePacketProtocol.h" />
     <ClInclude Include="GameRoom.h" />
@@ -154,6 +156,8 @@
     <ClInclude Include="UserInfoManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FriendshipGameRoom.cpp" />
+    <ClCompile Include="FriGameRoomManager.cpp" />
     <ClCompile Include="GameDBManager.cpp" />
     <ClCompile Include="GameRoom.cpp" />
     <ClCompile Include="GameRoomManager.cpp" />

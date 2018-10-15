@@ -51,6 +51,8 @@ typedef enum _ERROR_CODE
 #include "UserInfoManager.h"
 #include "GameRoom.h"
 #include "GameRoomManager.h"
+#include "FriendshipGameRoom.h"
+#include "FriGameRoomManager.h"
 #include "InGameIocp.h"
 #include "GamePacketProtocol.h"
 #include "GameDBManager.h"

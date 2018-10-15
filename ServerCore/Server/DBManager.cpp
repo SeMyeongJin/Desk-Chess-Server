@@ -55,7 +55,7 @@ BOOL DBManager::Begin(VOID)
 	res = mysql_use_result(conn);
 	while ((row = mysql_fetch_row(res)) != NULL)
 	{
-		printf("( %s | %s | %s | %s | %s | %s )\n\n", row[0], row[1], row[2], row[3], row[4], row[5]);
+		printf("( %s | %s | %s | %s | %s | %s | %s )\n\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
 	}
 
 	return TRUE;

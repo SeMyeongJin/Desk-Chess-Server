@@ -12,7 +12,6 @@ VOID IOCPServer::PROC_PT_SIGNUP(ConnectedSession * pConnectedSession, DWORD dwPr
 	if (GDBManager->RegistUserQuery(signUpData.userID, signUpData.userPW, signUpData.user_name, &errorCode))
 	{
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-		S_PT_SIGNUP_SUCC succData;
 
 		pConnectedSession->WritePacket(PT_SIGNUP_SUCC, writeBuffer, WRITE_PT_SIGNUP_SUCC(writeBuffer));
 		return;
@@ -20,7 +19,6 @@ VOID IOCPServer::PROC_PT_SIGNUP(ConnectedSession * pConnectedSession, DWORD dwPr
 	if (!GDBManager->RegistUserQuery(signUpData.userID, signUpData.userPW, signUpData.user_name, &errorCode))
 	{
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-		S_PT_SIGNUP_FAIL failData;
 		
 		pConnectedSession->WritePacket(PT_SIGNUP_FAIL, writeBuffer, WRITE_PT_SIGNUP_FAIL(writeBuffer, errorCode));
 	}
@@ -40,7 +38,6 @@ VOID IOCPServer::PROC_PT_LOGIN(ConnectedSession * pConnectedSession, DWORD dwPro
 		if (GDBManager->LoadUserData(loginData.userID, loginData.userPW, succData.user_name, &succData.rating))
 		{
 			BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-			printf("%s, %d\n", succData.user_name, succData.rating);
 			pConnectedSession->WritePacket(PT_LOGIN_SUCC, writeBuffer, WRITE_PT_LOGIN_SUCC(writeBuffer, succData.user_name, succData.rating));
 			return;
 		}
@@ -53,15 +50,4 @@ VOID IOCPServer::PROC_PT_LOGIN(ConnectedSession * pConnectedSession, DWORD dwPro
 
 		pConnectedSession->WritePacket(PT_LOGIN_FAIL, writeBuffer, WRITE_PT_LOGIN_FAIL(writeBuffer, failData.errorCode));
 	}
-}
-
-VOID IOCPServer::PROC_PT_CHAT(ConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength)
-{
-	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-	S_PT_CHAT chatData;
-	READ_PT_CHAT(pPacket, chatData);
-
-	mSessionManager.WriteAll(PT_CHAT, writeBuffer, WRITE_PT_CHAT(writeBuffer, chatData.user_name, chatData.message));
-	if (wcslen(chatData.message) > 0)
-		_tprintf(_T("%s :[chat message] %s\n"), chatData.user_name, chatData.message);
 }

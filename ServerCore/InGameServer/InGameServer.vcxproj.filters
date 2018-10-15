@@ -42,6 +42,12 @@
     <ClInclude Include="GameDBManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FriendshipGameRoom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FriGameRoomManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,6 +75,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameDBManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FriendshipGameRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FriGameRoomManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

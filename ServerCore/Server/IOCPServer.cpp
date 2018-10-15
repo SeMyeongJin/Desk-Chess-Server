@@ -81,9 +81,6 @@ VOID IOCPServer::OnIoRead(VOID * object, DWORD dwDataLength)
 			case PT_LOGIN:
 				PROC_PT_LOGIN(pConnectedSession, dwProtocol, packet, dwPacketLength);
 				break;
-			case PT_CHAT:
-				PROC_PT_CHAT(pConnectedSession, dwProtocol, packet, dwPacketLength);
-				break;
 			}
 		}
 	}

@@ -115,15 +115,22 @@ BOOL GameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserInfo *userIn
 	if (!userInfo)
 		return FALSE;
 
+	if (mUsers[0] == userInfo)
+	{
+		mUsers[0] = NULL;
+		userInfo->SetEnteredFriendshipRoom(NULL);
+		mCurrentUserNum -= 1;
+	}
+
+	if (mUsers[1] == userInfo)
+	{
+		mUsers[1] = NULL;
+		userInfo->SetEnteredFriendshipRoom(NULL);
+		mCurrentUserNum -= 1;
+	}
+
 	for (USHORT i = 0; i < 2; i++)
 	{
-		if (mUsers[i] == userInfo)
-		{
-			mUsers[i] = NULL;
-			userInfo->SetEnteredRoom(NULL);
-			mCurrentUserNum = max(SHORT(mCurrentUserNum--), 0);
-		}
-
 		if (!isDisconnected)
 		{
 			userInfo->WritePacket(PT_ROOM_LEAVE_SUCC, writeBuffer, WRITE_PT_ROOM_LEAVE_SUCC(writeBuffer));

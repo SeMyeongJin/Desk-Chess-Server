@@ -36,7 +36,6 @@ private:
 	// ProtocolProcess
 	VOID PROC_PT_SIGNUP(ConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
 	VOID PROC_PT_LOGIN(ConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
-	VOID PROC_PT_CHAT(ConnectedSession * pConnectedSession, DWORD dwProtocol, BYTE * pPacket, DWORD dwPacketLength);
 };
 
 /* IOCPServer클래스는 Iocp클래스를 상속받은 클래스로, 모든 통신 관련 작업 담당*/

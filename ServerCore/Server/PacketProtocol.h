@@ -9,7 +9,6 @@ typedef enum _PROTOCOL
 	PT_LOGIN,
 	PT_LOGIN_SUCC,
 	PT_LOGIN_FAIL,
-	PT_CHAT,
 	PT_END
 } PROTOCOL;
 
@@ -264,50 +263,6 @@ inline DWORD WRITE_PT_LOGIN_FAIL(BYTE *buffer, DWORD errorCode)
 	stream->SetBuffer(buffer);
 
 	stream->WriteDWORD(errorCode);
-
-	return stream->GetLength();
-}
-
-
- /* 
-	PT_CHAT 
- */
-typedef struct _S_PT_CHAT
-{
-	WCHAR user_name[20];
-	WCHAR message[40];
-} S_PT_CHAT;
-// CHAT_READ
-inline VOID READ_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->ReadWCHARs(parameter.user_name, 20);
-	stream->ReadWCHARs(parameter.message, 40);
-}
-// CHAT_WRITE
-inline DWORD WRITE_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.user_name, 20);
-	stream->WriteWCHARs(parameter.message, 40);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_CHAT(BYTE *buffer, WCHAR *name, WCHAR *message)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	WCHAR _name[20] = { 0, };
-	_tcsncpy(_name, name, 20);
-	stream->WriteWCHARs(_name, 20);
-	WCHAR _message[40] = { 0, };
-	_tcsncpy(_message, message, 40);
-	stream->WriteWCHARs(_message, 40);
 
 	return stream->GetLength();
 }
