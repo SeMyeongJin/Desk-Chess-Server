@@ -134,7 +134,6 @@
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="CriticalSection.h" />
-    <ClInclude Include="Crypt.h" />
     <ClInclude Include="EventSelect.h" />
     <ClInclude Include="Iocp.h" />
     <ClInclude Include="Log.h" />
@@ -143,7 +142,6 @@
     <ClInclude Include="MultiThreadSync.h" />
     <ClInclude Include="NetworkWrapping.h" />
     <ClInclude Include="PacketWrapping.h" />
-    <ClInclude Include="Random.h" />
     <ClInclude Include="ServerLibrary.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Stream.h" />
@@ -152,13 +150,11 @@
   <ItemGroup>
     <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="ClientSession.cpp" />
-    <ClCompile Include="Crypt.cpp" />
     <ClCompile Include="EventSelect.cpp" />
     <ClCompile Include="Iocp.cpp" />
     <ClCompile Include="MiniDump.cpp" />
     <ClCompile Include="NetworkWrapping.cpp" />
     <ClCompile Include="PacketWrapping.cpp" />
-    <ClCompile Include="Random.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

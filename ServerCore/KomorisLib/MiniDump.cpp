@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MiniDump.h"
 
-typedef BOOL(WINAPI *MINIDUMPWRITEDUMP)( // Callback 함수의 원형
+typedef BOOL(WINAPI *MINIDUMPWRITEDUMP)(
 	HANDLE hProcess,
 	DWORD dwPid,
 	HANDLE hFile,

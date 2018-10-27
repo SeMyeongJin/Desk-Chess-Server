@@ -14,6 +14,8 @@ VOID IOCPServer::PROC_PT_SIGNUP(ConnectedSession * pConnectedSession, DWORD dwPr
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
 
 		pConnectedSession->WritePacket(PT_SIGNUP_SUCC, writeBuffer, WRITE_PT_SIGNUP_SUCC(writeBuffer));
+
+		Log::WriteLog(_T(" Write Signup Packet Completely : ID(%s)"), signUpData.userID);
 		return;
 	}
 	if (!GDBManager->RegistUserQuery(signUpData.userID, signUpData.userPW, signUpData.user_name, &errorCode))
@@ -32,13 +34,14 @@ VOID IOCPServer::PROC_PT_LOGIN(ConnectedSession * pConnectedSession, DWORD dwPro
 	S_PT_LOGIN_SUCC succData;
 	ZeroMemory(succData.user_name, sizeof(succData.user_name));
 
-	_tprintf(_T("%s, %s\n"), loginData.userID, loginData.userPW);
 	if (GDBManager->LoginCheckQuery(loginData.userID, loginData.userPW))
 	{
 		if (GDBManager->LoadUserData(loginData.userID, loginData.userPW, succData.user_name, &succData.rating))
 		{
 			BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
 			pConnectedSession->WritePacket(PT_LOGIN_SUCC, writeBuffer, WRITE_PT_LOGIN_SUCC(writeBuffer, succData.user_name, succData.rating));
+
+			Log::WriteLog(_T(" Write login Packet Completely : ID(%s)"), loginData.userID);
 			return;
 		}
 	}

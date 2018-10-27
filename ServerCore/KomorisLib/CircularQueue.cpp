@@ -34,8 +34,6 @@ BYTE* CircularQueue::Push(VOID *object, BYTE *data, DWORD dataLength)
 {
 	ThreadSync Sync;
 
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
-
 	if (!object || !data)
 		return NULL;
 
@@ -57,8 +55,6 @@ BYTE* CircularQueue::Push(VOID *object, BYTE *data, DWORD dataLength)
 BYTE* CircularQueue::Push(VOID *object, DWORD protocol, BYTE *data, DWORD dataLength)
 {
 	ThreadSync Sync;
-
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
 
 	if (!object || !data)
 		return NULL;
@@ -83,8 +79,6 @@ BYTE* CircularQueue::Push(VOID *object, DWORD protocol, BYTE *data, DWORD dataLe
 BYTE *CircularQueue::Push(VOID *object, BYTE *data, DWORD dataLength, LPCSTR remoteAddress, USHORT remotePort)
 {
 	ThreadSync Sync;
-
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
 
 	if (!object || !data)
 		return NULL;
@@ -112,8 +106,6 @@ BYTE *CircularQueue::Push(VOID *object, BYTE *data, DWORD dataLength, LPCSTR rem
 BYTE *CircularQueue::Push(VOID *object, DWORD protocol, BYTE *data, DWORD dataLength, LPCSTR remoteAddress, USHORT remotePort)
 {
 	ThreadSync Sync;
-
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
 
 	if (!object || !data)
 		return NULL;
@@ -143,8 +135,6 @@ BOOL CircularQueue::Pop(VOID)
 {
 	ThreadSync Sync;
 
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
-
 	if (mQueueHead == mQueueTail)
 		return FALSE;
 
@@ -158,8 +148,6 @@ BOOL CircularQueue::Pop(VOID)
 BOOL CircularQueue::Pop(VOID **object, BYTE *data, DWORD &dataLength)
 {
 	ThreadSync Sync;
-
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
 
 	if (!object || !data)
 		return FALSE;
@@ -182,8 +170,6 @@ BOOL CircularQueue::Pop(VOID **object, BYTE *data, DWORD &dataLength)
 BOOL CircularQueue::Pop(VOID **object, DWORD &protocol, BYTE *data, DWORD &dataLength)
 {
 	ThreadSync Sync;
-
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
 
 	if (!object || !data)
 		return FALSE;
@@ -208,8 +194,6 @@ BOOL CircularQueue::Pop(VOID **object, BYTE *data, DWORD &dataLength, LPSTR remo
 {
 	ThreadSync Sync;
 
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
-
 	if (!object || !data)
 		return FALSE;
 
@@ -233,8 +217,6 @@ BOOL CircularQueue::Pop(VOID **object, BYTE *data, DWORD &dataLength, LPSTR remo
 BOOL CircularQueue::Pop(VOID **object, DWORD &protocol, BYTE *data, DWORD &dataLength, LPSTR remoteAddress, USHORT &remotePort)
 {
 	ThreadSync Sync;
-
-	//CLog::WriteLog(_T("Queue Status  : Head (%d) Tail (%d)\n"), mQueueHead, mQueueTail);
 
 	if (!object || !data)
 		return FALSE;

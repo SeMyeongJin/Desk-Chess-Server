@@ -22,7 +22,6 @@ private:
 
 	CircularQueue						WriteQueue;
 
-	//std::map<std::string, DWORD>		mLastReadPacketInfoMapForUdp;
 	std::vector<READ_PACKET_INFO>		mLastReadPacketInfoVectorForUdp;
 
 public:

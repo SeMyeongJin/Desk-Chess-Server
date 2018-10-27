@@ -16,7 +16,6 @@ public:
 	BOOL			TcpBind(VOID);
 	BOOL			UdpBind(USHORT port);
 
-	// Ãß°¡
 	BOOL			GetLocalIP(WCHAR* pIP);
 	USHORT			GetLocalPort(VOID);
 

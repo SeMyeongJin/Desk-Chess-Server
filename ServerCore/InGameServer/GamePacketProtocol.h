@@ -38,6 +38,8 @@ typedef enum _TCP_PROTOCOL
 	PT_OFFICIAL_GAME_WIN,
 	PT_OFFICIAL_GAME_LOSE,
 	PT_FRIENDSHIP_GAME_WIN,
+	PT_RESIGNS,
+	PT_DELIVERY_RESIGNS,
 	PT_END
 } TCP_PROTOCOL;
 
@@ -535,7 +537,6 @@ inline DWORD WRITE_PT_CHAT(BYTE *buffer, WCHAR *name, WCHAR *message)
 */
 typedef struct _S_PT_DELIVERY_CHAT
 {
-	WCHAR user_name[20];
 	WCHAR message[40];
 } S_PT_DELIVERY_CHAT;
 // DELIVERY_CHAT_READ
@@ -544,7 +545,6 @@ inline VOID READ_PT_DELIVERY_CHAT(BYTE *buffer, S_PT_DELIVERY_CHAT &parameter)
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 
-	stream->ReadWCHARs(parameter.user_name, 20);
 	stream->ReadWCHARs(parameter.message, 40);
 }
 // DELIVERY_CHAT_WRITE
@@ -553,19 +553,15 @@ inline DWORD WRITE_PT_DELIVERY_CHAT(BYTE *buffer, S_PT_DELIVERY_CHAT &parameter)
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 
-	stream->WriteWCHARs(parameter.user_name, 20);
 	stream->WriteWCHARs(parameter.message, 40);
 
 	return stream->GetLength();
 }
-inline DWORD WRITE_PT_DELIVERY_CHAT(BYTE *buffer, WCHAR *name, WCHAR *message)
+inline DWORD WRITE_PT_DELIVERY_CHAT(BYTE *buffer, WCHAR *message)
 {
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 
-	WCHAR _name[20] = { 0, };
-	_tcsncpy(_name, name, 20);
-	stream->WriteWCHARs(_name, 20);
 	WCHAR _message[40] = { 0, };
 	_tcsncpy(_message, message, 40);
 	stream->WriteWCHARs(_message, 40);
@@ -775,6 +771,66 @@ inline DWORD WRITE_PT_FRIENDSHIP_GAME_WIN(BYTE *buffer, WCHAR *name)
 	WCHAR _name[20] = { 0, };
 	_tcsncpy(_name, name, 20);
 	stream->WriteWCHARs(_name, 20);
+
+	return stream->GetLength();
+}
+
+
+/*
+	PT_RESIGNS
+*/
+typedef struct _S_PT_RESIGNS
+{
+
+} S_PT_RESIGNS;
+// RESIGNS_READ
+inline VOID READ_PT_RESIGNS(BYTE *buffer, S_PT_RESIGNS &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+}
+// RESIGNS_WRITE
+inline DWORD WRITE_PT_RESIGNS(BYTE *buffer, S_PT_RESIGNS &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	return stream->GetLength();
+}
+inline DWORD WRITE_PT_RESIGNS(BYTE *buffer)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	return stream->GetLength();
+}
+
+
+/*
+	PT_DELIVERY_RESIGNS
+*/
+typedef struct _S_PT_DELIVERY_RESIGNS
+{
+
+} S_PT_DELIVERY_RESIGNS;
+// DELIVERY_RESIGNS_READ
+inline VOID READ_PT_DELIVERY_RESIGNS(BYTE *buffer, S_PT_DELIVERY_RESIGNS &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+}
+// DELIVERY_RESIGNS_WRITE
+inline DWORD WRITE_PT_DELIVERY_RESIGNS(BYTE *buffer, S_PT_DELIVERY_RESIGNS &parameter)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
+
+	return stream->GetLength();
+}
+inline DWORD WRITE_PT_DELIVERY_RESIGNS(BYTE *buffer)
+{
+	StreamSP stream;
+	stream->SetBuffer(buffer);
 
 	return stream->GetLength();
 }

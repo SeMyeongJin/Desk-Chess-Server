@@ -158,7 +158,7 @@ BOOL GameDBManager::WinOfficialGame(WCHAR *name)
 		cout << "Win query error : 3" << mysql_error(conn) << endl;
 		return FALSE;
 	}
-
+	
 	return TRUE;
 }
 

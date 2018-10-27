@@ -19,11 +19,6 @@ VOID InGameIocp::PROC_PT_REQ_USER_INFO(UserInfo * userInfo, BYTE * pPacket)
 VOID InGameIocp::PROC_PT_OFFICIAL_GAME_START(UserInfo * userInfo, BYTE * pPacket)
 {
 	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-
-	userInfo->SetStatus(US_GAME_STARTING);
-
-	printf("PROC_PT_OFFICIAL_GAME_START\n");
-
 	S_PT_OFFICIAL_GAME_START OGData;
 	READ_PT_OFFICIAL_GAME_START(pPacket, OGData);
 
@@ -51,11 +46,6 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_START(UserInfo * userInfo, BYTE * pPacket
 VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_START(UserInfo * userInfo, BYTE * pPacket)
 {
 	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-
-	userInfo->SetStatus(US_GAME_STARTING);
-
-	printf("PROC_PT_FRIENDSHIP_GAME_START\n");
-
 	S_PT_FRIENDSHIP_GAME_START FGData;
 	READ_PT_FRIENDSHIP_GAME_START(pPacket, FGData);
 
@@ -90,14 +80,12 @@ VOID InGameIocp::PROC_PT_ROOM_LEAVE(UserInfo * userInfo, BYTE * pPacket)
 	if (room)
 	{
 		room->LeaveUser(FALSE, this, userInfo);
-		userInfo->SetStatus(US_LOBBY_ENTERED);
 	}
 
 	FriendshipGameRoom *friRoom = userInfo->GetEnteredFriendshipRoom();
 	if (friRoom)
 	{
 		friRoom->LeaveUser(FALSE, this, userInfo);
-		userInfo->SetStatus(US_LOBBY_ENTERED);
 	}
 }
 
@@ -111,6 +99,15 @@ VOID InGameIocp::PROC_PT_CHAT(UserInfo * userInfo, BYTE * pPacket)
 	mUserInfoManager.WriteAll(PT_CHAT, writeBuffer, WRITE_PT_CHAT(writeBuffer, chatData.user_name, chatData.message));
 	if (wcslen(chatData.message) > 0)
 		_tprintf(_T("%s :[chat message] %s\n"), chatData.user_name, chatData.message);
+}
+
+VOID InGameIocp::PROC_PT_DELIVERY_CHAT(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_DELIVERY_CHAT chatData;
+	READ_PT_DELIVERY_CHAT(pPacket, chatData);
+
+	mUserInfoManager.WriteAll(PT_DELIVERY_CHAT, writeBuffer, WRITE_PT_DELIVERY_CHAT(writeBuffer, chatData.message));
 }
 
 VOID InGameIocp::PROC_PT_PIECE_MOVE(UserInfo * userInfo, BYTE * pPacket)
@@ -151,6 +148,7 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_WIN(UserInfo * userInfo, BYTE * pPacket)
 	READ_PT_OFFICIAL_GAME_WIN(pPacket, winData);
 
 	GgameDBManager.WinOfficialGame(winData.userName);
+	Log::WriteLog(_T("OFFICIAL GAME WIN PACKET : NAME(%s)"), winData.userName);
 }
 
 VOID InGameIocp::PROC_PT_OFFICIAL_GAME_LOSE(UserInfo * userInfo, BYTE * pPacket)
@@ -160,6 +158,7 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_LOSE(UserInfo * userInfo, BYTE * pPacket)
 	READ_PT_OFFICIAL_GAME_LOSE(pPacket, loseData);
 
 	GgameDBManager.LoseOfficialGame(loseData.userName);
+	Log::WriteLog(_T("OFFICIAL GAME LOSE PACKET : NAME(%s)"), loseData.userName);
 }
 
 VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_WIN(UserInfo * userInfo, BYTE * pPacket)
@@ -169,4 +168,21 @@ VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_WIN(UserInfo * userInfo, BYTE * pPacket
 	READ_PT_FRIENDSHIP_GAME_WIN(pPacket, winData);
 
 	GgameDBManager.WinFriendshipGame(winData.userName);
+	Log::WriteLog(_T("FRIENDSHIP GAME WIN PACKET : Name(%s)"), winData.userName);
+}
+
+VOID InGameIocp::PROC_PT_RESIGNS(UserInfo * userInfo, BYTE * pPacket)
+{
+	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+	S_PT_RESIGNS resData;
+	READ_PT_RESIGNS(pPacket, resData);
+
+	if (userInfo->GetEnteredRoom())
+	{
+		userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+	}
+	if (userInfo->GetEnteredFriendshipRoom())
+	{
+		userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+	}
 }

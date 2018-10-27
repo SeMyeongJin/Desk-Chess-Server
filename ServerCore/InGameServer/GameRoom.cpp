@@ -10,7 +10,6 @@ GameRoom::GameRoom()
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
 	mIsGameStarted				= FALSE;
-	mRemainGameTime				= GAME_TIME;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
 }
@@ -31,7 +30,6 @@ BOOL GameRoom::Begin(DWORD roomNumber)
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
 	mIsGameStarted				= FALSE;
-	mRemainGameTime				= GAME_TIME;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
 
@@ -48,7 +46,6 @@ BOOL GameRoom::End(VOID)
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
 	mIsGameStarted				= FALSE;
-	mRemainGameTime				= GAME_TIME;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
 
@@ -80,9 +77,6 @@ BOOL GameRoom::JoinUser(UserInfo *userInfo, USHORT &slotNumber)
 
 	for (USHORT i = StartPos; i<2; i++)
 	{
-		// 편에 따른 위치 선정이 필요하다.
-		// 빈자리를 찾아준다.
-
 		if (mUsers[i] == NULL)
 		{
 			mUsers[i] = userInfo;
@@ -92,7 +86,6 @@ BOOL GameRoom::JoinUser(UserInfo *userInfo, USHORT &slotNumber)
 
 			slotNumber = i;
 
-			// 방 처음 생성
 			if (mCurrentUserNum == 1)
 			{
 				mRoomManager = userInfo;
@@ -118,14 +111,14 @@ BOOL GameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserInfo *userIn
 	if (mUsers[0] == userInfo)
 	{
 		mUsers[0] = NULL;
-		userInfo->SetEnteredFriendshipRoom(NULL);
+		userInfo->SetEnteredRoom(NULL);
 		mCurrentUserNum -= 1;
 	}
 
 	if (mUsers[1] == userInfo)
 	{
 		mUsers[1] = NULL;
-		userInfo->SetEnteredFriendshipRoom(NULL);
+		userInfo->SetEnteredRoom(NULL);
 		mCurrentUserNum -= 1;
 	}
 
@@ -211,7 +204,6 @@ DWORD GameRoom::ReadyComplete(VOID)
 	{
 		if (mUsers[i])
 		{
-			mUsers[i]->SetStatus(US_GAME_STARTING);
 			mUsers[i]->SetIsReady(FALSE);
 		}
 	}
@@ -223,7 +215,6 @@ BOOL GameRoom::StartGame(VOID)
 {
 	ThreadSync Sync;
 
-	// 모두 IntroComplete인지 확인한다.
 	for (USHORT i = 0; i<2; i++)
 	{
 		if (mUsers[i])
@@ -234,18 +225,13 @@ BOOL GameRoom::StartGame(VOID)
 	}
 
 	mIsGameStarted = TRUE;
-	mRemainGameTime = GAME_TIME;
 
-	// 모두일 경우 TRUE를 리턴 해 주고 LoadComplete 초기화
-	// 모든 사용자 게임상태로 변경
 	for (USHORT i = 0; i<2; i++)
 	{
 		if (mUsers[i])
 		{
-			mUsers[i]->SetStatus(US_GAME_STARTED);
 			mUsers[i]->SetIsLoadComplete(FALSE);
 			mUsers[i]->SetIsIntroComplete(FALSE);
-			mUsers[i]->InitGame();
 		}
 	}
 
@@ -256,16 +242,13 @@ BOOL GameRoom::EndGame(InGameIocp *iocp)
 {
 	ThreadSync sync;
 
-	// READY, LOADCOMPLETE, IsStarted, USER_STATS 다 초기화
 	for (USHORT i = 0; i<2; i++)
 	{
 		if (mUsers[i])
 		{
-			mUsers[i]->SetStatus(US_LOBBY_ENTERED);
 			mUsers[i]->SetIsLoadComplete(FALSE);
 			mUsers[i]->SetIsIntroComplete(FALSE);
 			mUsers[i]->SetIsReady(FALSE);
-			mUsers[i]->InitGame();
 		}
 	}
 

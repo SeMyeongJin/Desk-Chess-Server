@@ -38,7 +38,6 @@ VOID IOCPServer::OnIoConnected(VOID * object)
 {
 	ConnectedSession *pConnectedSession = reinterpret_cast<ConnectedSession*>(object);
 	
-	printf("Connected Session...\n");
 	if (!IOCP::RegisterSocketToIocp(pConnectedSession->GetSocket(), reinterpret_cast<ULONG_PTR>(pConnectedSession)))
 		return;
 
@@ -55,8 +54,7 @@ VOID IOCPServer::OnIoConnected(VOID * object)
 VOID IOCPServer::OnIoDisconnected(VOID * object)
 {
 	ConnectedSession *pConnectedSession = reinterpret_cast<ConnectedSession*>(object);
-
-	printf("Disconnected Session...\n");
+	
 	pConnectedSession->Restart(mListen->GetSocket());
 
 	pConnectedSession->SetConnected(FALSE);

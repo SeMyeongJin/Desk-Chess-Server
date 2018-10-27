@@ -21,7 +21,7 @@ VOID EventSelect::SelectThreadCallback(VOID)
 
 	while (TRUE)
 	{
-		SetEvent(mStartupEventHandle); // 스레드가 정상적으로 시작되었다는 것을 알림.
+		SetEvent(mStartupEventHandle);
 
 		EventID = ::WaitForMultipleObjects(2, ThreadEvents, FALSE, INFINITE);
 		switch (EventID)
@@ -131,7 +131,6 @@ BOOL EventSelect::Begin(SOCKET socket)
 		return FALSE;
 	}
 
-	// Thread가 Wait될때까지 시간을 벌어준다.
 	WaitForSingleObject(mStartupEventHandle, INFINITE);
 
 	return TRUE;

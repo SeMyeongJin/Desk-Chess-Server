@@ -7,10 +7,10 @@ public:
 	virtual ~ClientSession(VOID);
 
 private:
-	PacketWrapping	mSession; // 통신을 담당하는 Session 개체
-	CircularQueue	mReadPacketQueue; // 받은 패킷을 저장하고 있는 큐
+	PacketWrapping	mSession;
+	CircularQueue	mReadPacketQueue; 
 
-	BOOL			isUdp; // 현재 UDP로 사용 중인지 확인하는 변수
+	BOOL			isUdp; 
 
 public:
 	BOOL			BeginTcp(LPSTR remoteAddress, USHORT remotePort);

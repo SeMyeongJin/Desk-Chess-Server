@@ -45,16 +45,10 @@
     <ClInclude Include="MultiThreadSync.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ServerLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Stream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Crypt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Iocp.h">
@@ -83,13 +77,7 @@
     <ClCompile Include="MiniDump.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Stream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Crypt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Iocp.cpp">

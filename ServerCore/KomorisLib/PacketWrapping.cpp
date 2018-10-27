@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Crypt.h"
 #include "CriticalSection.h"
 #include "MultiThreadSync.h"
 #include "CircularQueue.h"
@@ -71,10 +70,6 @@ BOOL PacketWrapping::GetPacket(DWORD &protocol, BYTE *packet, DWORD &packetLengt
 
 	if (PacketLength <= mRemainLength)
 	{
-		//Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-		//	mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-		//	PacketLength - sizeof(DWORD)/*LENGTH*/);
-
 		DWORD PacketNumber = 0;
 		DWORD Protocol = 0;
 
@@ -140,10 +135,6 @@ BOOL PacketWrapping::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &pr
 
 	if (PacketLength <= mRemainLength)
 	{
-		//Crypt::Decrypt(mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-		//	mPacketBuffer + sizeof(DWORD)/*LENGTH*/,
-		//	PacketLength - sizeof(DWORD)/*LENGTH*/);
-
 		DWORD PacketNumber = 0;
 		DWORD Protocol = 0;
 
@@ -204,8 +195,6 @@ BOOL PacketWrapping::GetPacket(LPSTR remoteAddress, USHORT remotePort, DWORD &pr
 	return FALSE;
 }
 
-// ReadPacketForIocp는 FALSE가 떨어질때 까지 while문을 돌린다.
-// NetworkSession 클래스의 버퍼에서 PacketSession 클래스의 버퍼로 데이터를 복사하는 함수
 BOOL PacketWrapping::ReadPacketForIocp(DWORD readLength)
 {
 	ThreadSync sync;
@@ -215,11 +204,9 @@ BOOL PacketWrapping::ReadPacketForIocp(DWORD readLength)
 
 	mRemainLength += readLength;
 
-	//return getPacket(protocol, packet, packetLength);
 	return TRUE;
 }
 
-// ReadPacketForEventSelect는 FALSE가 떨어질때 까지 while문을 돌린다.
 BOOL PacketWrapping::ReadPacketForEventSelect(VOID)
 {
 	ThreadSync sync;
@@ -231,11 +218,9 @@ BOOL PacketWrapping::ReadPacketForEventSelect(VOID)
 
 	mRemainLength += ReadLength;
 
-	//return getPacket(protocol, packet, packetLength);
 	return TRUE;
 }
 
-// ReadPacketForIocp는 FALSE가 떨어질때 까지 while문을 돌린다.
 BOOL PacketWrapping::ReadFromPacketForIocp(LPSTR remoteAddress, USHORT &remotePort, DWORD readLength)
 {
 	ThreadSync sync;
@@ -245,11 +230,9 @@ BOOL PacketWrapping::ReadFromPacketForIocp(LPSTR remoteAddress, USHORT &remotePo
 
 	mRemainLength += readLength;
 
-	//return getPacket(remoteAddress, remotePort, protocol, packet, packetLength);
 	return TRUE;
 }
 
-// ReadPacketForEventSelect는 FALSE가 떨어질때 까지 while문을 돌린다.
 BOOL PacketWrapping::ReadFromPacketForEventSelect(LPSTR remoteAddress, USHORT &remotePort)
 {
 	ThreadSync sync;
@@ -261,7 +244,6 @@ BOOL PacketWrapping::ReadFromPacketForEventSelect(LPSTR remoteAddress, USHORT &r
 
 	mRemainLength += ReadLength;
 
-	//return getPacket(remoteAddress, remotePort, protocol, packet, packetLength);
 	return TRUE;
 }
 
@@ -303,8 +285,6 @@ BOOL PacketWrapping::WritePacket(DWORD protocol, const BYTE *packet, DWORD packe
 		sizeof(DWORD)/*PACKETNUMBER*/ +
 		sizeof(DWORD)/*PROTOCOL*/,
 		packet, packetLength);
-
-	//Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
 
 	// WriteQueue를 이용해서 패킷이 전송 완료가 되었을까지 메모리를 살려둔다.
 	BYTE *WriteData = WriteQueue.Push(this, TempBuffer, PacketLength);
@@ -349,8 +329,6 @@ BOOL PacketWrapping::WriteToPacket(LPCSTR remoteAddress, USHORT remotePort, DWOR
 		sizeof(DWORD)/*PACKETNUMBER*/ +
 		sizeof(DWORD)/*PROTOCOL*/,
 		packet, packetLength);
-
-	//Crypt::Encrypt(TempBuffer + sizeof(DWORD), TempBuffer + sizeof(DWORD), PacketLength - sizeof(DWORD));
 
 	// WriteQueue를 이용해서 패킷이 전송 완료가 되었을까지 메모리를 살려둔다.
 	BYTE *WriteData = WriteQueue.Push(this, TempBuffer, PacketLength);

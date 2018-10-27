@@ -7,7 +7,6 @@ UserInfo::UserInfo()
 	ZeroMemory(mUserID, sizeof(mUserID));
 	ZeroMemory(mNickName, sizeof(mNickName));
 	mLifePoint				= 0;
-	mStatus					= US_NONE;
 	mEnteredRoom			= NULL;
 	mEnteredFriendshipRoom  = NULL;
 
@@ -15,10 +14,6 @@ UserInfo::UserInfo()
 	mIsReady				= FALSE;
 	mIsLoadComplete			= FALSE;
 	mIsIntroComplete		= FALSE;
-
-	mGameGold				= 0;
-	mSpaceShipHP			= 0;
-	mTowerHP				= 0;
 }
 
 
@@ -34,17 +29,12 @@ BOOL UserInfo::Begin(VOID)
 	ZeroMemory(mUserID, sizeof(mUserID));
 	ZeroMemory(mNickName, sizeof(mNickName));
 	mLifePoint				= 0;
-	mStatus					= US_NONE;
 	mEnteredRoom			= NULL;
 	mEnteredFriendshipRoom  = NULL;
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
 	mIsLoadComplete			= FALSE;
 	mIsIntroComplete		= FALSE;
-
-	mGameGold				= 0;
-	mSpaceShipHP			= 0;
-	mTowerHP				= 0;
 
 	return PacketWrapping::Begin();
 }
@@ -56,17 +46,12 @@ BOOL UserInfo::End(VOID)
 	ZeroMemory(mUserID, sizeof(mUserID));
 	ZeroMemory(mNickName, sizeof(mNickName));
 	mLifePoint				= 0;
-	mStatus					= US_NONE;
 	mEnteredRoom			= NULL;
 	mEnteredRoom			= NULL;
 	mIsConnected			= FALSE;
 	mIsReady				= FALSE;
 	mIsLoadComplete			= FALSE;
 	mIsIntroComplete		= FALSE;
-
-	mGameGold				= 0;
-	mSpaceShipHP			= 0;
-	mTowerHP				= 0;
 
 	return PacketWrapping::End();
 }

@@ -149,7 +149,7 @@ VOID InGameIocp::OnIoConnected(VOID * object)
 {
 	UserInfo *userInfo = (UserInfo*)object;
 
-	printf("Connected User...\n");
+	Log::WriteLog(_T("Connected Session"));
 	if (!IOCP::RegisterSocketToIocp(userInfo->GetSocket(), (ULONG_PTR)userInfo))
 	{
 		End();
@@ -176,7 +176,7 @@ VOID InGameIocp::OnIoDisconnected(VOID *object)
 {
 	UserInfo *userInfo = (UserInfo*)object;
 
-	printf("Disconnected Session...\n");
+	Log::WriteLog(_T("Disconnected Session"));
 	if (!userInfo->Reload(mListenSession->GetSocket()))
 	{
 		End();
@@ -206,11 +206,13 @@ VOID InGameIocp::OnIoRead(VOID *object, DWORD dataLength)
 			if (protocol == PT_FRIENDSHIP_GAME_START) PROC_PT_FRIENDSHIP_GAME_START(userInfo, packet);
 			if (protocol == PT_ROOM_LEAVE) PROC_PT_ROOM_LEAVE(userInfo, packet);
 			if (protocol == PT_CHAT) PROC_PT_CHAT(userInfo, packet);
+			if (protocol == PT_DELIVERY_CHAT) PROC_PT_DELIVERY_CHAT(userInfo, packet);
 			if (protocol == PT_PIECE_MOVE) PROC_PT_PIECE_MOVE(userInfo, packet);
 			if (protocol == PT_PIECE_PROMOTION) PROC_PT_PIECE_PROMOTION(userInfo, packet);
 			if (protocol == PT_OFFICIAL_GAME_WIN) PROC_PT_OFFICIAL_GAME_WIN(userInfo, packet);
 			if (protocol == PT_OFFICIAL_GAME_LOSE) PROC_PT_OFFICIAL_GAME_LOSE(userInfo, packet);
 			if (protocol == PT_FRIENDSHIP_GAME_WIN) PROC_PT_FRIENDSHIP_GAME_WIN(userInfo, packet);
+			if (protocol == PT_RESIGNS) PROC_PT_RESIGNS(userInfo, packet);
 		}
 	}
 

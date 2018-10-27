@@ -19,25 +19,12 @@
 
 
 #define SERVER_PORT					3500
-#define MAX_USER					100
-
-#define SPACESHIP_HP				2500
-#define TOWER_HP					1000
-#define GAME_TIME					600
+#define MAX_USER					2002
 
 #define HAVE_STRUCT_TIMESPEC
 
 #include <my_global.h>
 #include <mysql.h>
-
-typedef enum _USER_STATUS
-{
-	US_NONE,
-	US_LOBBY_ENTERED,
-	US_GAME_STARTING,
-	US_GAME_STARTED,
-	US_GAME_END
-} USER_STATUS;
 
 typedef enum _ERROR_CODE
 {

@@ -161,7 +161,7 @@ BOOL NetworkWrapping::End(VOID)
 
 BOOL NetworkWrapping::Listen(USHORT port, INT backLog)
 {
-	ThreadSync Sync;	// 동기화 개체
+	ThreadSync Sync;
 
 	if (port <= 0 || backLog <= 0)
 		return FALSE;
@@ -169,7 +169,6 @@ BOOL NetworkWrapping::Listen(USHORT port, INT backLog)
 	if (!mSocket)
 		return FALSE;
 
-	// Listen할 정보를 저장하는 변수
 	SOCKADDR_IN listenSocketInfo;
 	
 	listenSocketInfo.sin_family = AF_INET;
@@ -190,7 +189,6 @@ BOOL NetworkWrapping::Listen(USHORT port, INT backLog)
 		return FALSE;
 	}
 
-	// LINGER 관련 옵션 처리
 	LINGER Linger;
 	Linger.l_onoff = 1;
 	Linger.l_linger = 0;
@@ -223,9 +221,6 @@ BOOL NetworkWrapping::Accept(SOCKET listenSocket)
 
 		return FALSE;
 	}
-
-	//BOOL noDelay = TRUE;
-	//setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (const char FAR*)&noDelay, sizeof(noDelay));
 
 	// AcceptEx사용 (Accept를 사용하면 해당 접속을 처리하는 동안 다른 처리를 할수 없다
 	// 따라서 접속이 몰릴경우 접속 실패를 할수 있으므로 미리 생성된 소캣을 사용하여 Accept처리를 한다)
@@ -263,7 +258,7 @@ BOOL NetworkWrapping::InitializeReadForIocp(VOID)
 
 	INT returnValue = WSARecv(mSocket,
 		&wsaBuf,
-		1, // 버퍼의 갯수 입력,WsaBuf를 이용한 원형 버퍼 사용시 1이상입력
+		1,
 		&readBytes,
 		&readFlag,
 		&mReadOverlapped.overlapped,
@@ -381,13 +376,9 @@ BOOL NetworkWrapping::Connect(LPSTR address, USHORT port)
 	SOCKADDR_IN remoteAddressInfo;
 
 	remoteAddressInfo.sin_family = AF_INET;
-	// 접속할 포트를 htons를 통해 변환해서 넣어준다
 	remoteAddressInfo.sin_port = htons(port);
 	remoteAddressInfo.sin_addr.S_un.S_addr = inet_addr(address);
-	// inet_addr은 일반 문자열을 unsigned long으로 변환해준다.
 
-	// 위에 설정된 주소로 접속 시도
-	// WSAConnect 혹은 버클리 소캣 함수인 connect를 이용할수 있다.
 	if (WSAConnect(mSocket, (LPSOCKADDR)&remoteAddressInfo, sizeof(SOCKADDR_IN), NULL, NULL, NULL, NULL) == SOCKET_ERROR) {
 		//실패이지만 대기상태라고 나오면 성공
 		if (WSAGetLastError() != WSAEWOULDBLOCK) {
@@ -399,7 +390,6 @@ BOOL NetworkWrapping::Connect(LPSTR address, USHORT port)
 	return TRUE;
 }
 
-// UDP를 사용하기 위한 bind
 BOOL NetworkWrapping::UdpBind(USHORT port)
 {
 	ThreadSync sync;
@@ -485,10 +475,6 @@ BOOL NetworkWrapping::TcpBind(VOID)
 	if (mSocket == INVALID_SOCKET)
 		return FALSE;
 
-	// TCP_NODELAY옵션
-	//BOOL noDelay = TRUE;
-	//setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (const char FAR*)&noDelay, sizeof(noDelay));
-
 	return TRUE;
 }
 
@@ -498,16 +484,6 @@ BOOL NetworkWrapping::GetLocalIP(WCHAR* pIP)
 
 	if (!mSocket)
 		return FALSE;
-
-	//SOCKADDR_IN addr;
-	//ZeroMemory(&addr, sizeof(addr));
-
-	//int addrLength = sizeof(addr);
-	//if(getsockname(mSocket, (sockaddr*)&addr, &addrLength ) != SOCKET_ERROR)
-	//{
-	//	if(MultiByteToWideChar(CP_ACP, 0, inet_ntoa(addr.sin_addr), 32, pIP, 32) > 0)
-	//		return TRUE;
-	//}
 
 	CHAR	Name[256] = { 0, };
 

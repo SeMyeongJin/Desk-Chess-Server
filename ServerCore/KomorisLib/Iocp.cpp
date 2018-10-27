@@ -12,10 +12,10 @@ DWORD WINAPI WorkerThreadCallback(LPVOID parameter)
 
 IOCP::IOCP(VOID)
 {
-	mIocpHandle = NULL; // IOCP 관리하는 핸들 값
-	mWorkerThreadCount = 0; // 사용할 WorkerThread 개수
+	mIocpHandle = NULL; 
+	mWorkerThreadCount = 0;
 
-	mStartupEventHandle = NULL; // 시작을 관리하는 이벤트
+	mStartupEventHandle = NULL;
 }
 
 IOCP::~IOCP(VOID)
@@ -26,7 +26,6 @@ BOOL IOCP::Begin(VOID)
 {
 	mIocpHandle = NULL;
 
-	// 시스템의 정보를 가져옵니다.
 	SYSTEM_INFO systemInfo;
 	GetSystemInfo(&systemInfo);
 
@@ -115,9 +114,8 @@ VOID IOCP::WorkerThreadCallback(VOID)
 			&numberOfByteTransfered, // IO에 이용된 데이터 크기
 			(PULONG_PTR)&completionKey, // 소켓이나 파일의 핸들 값
 			&overlapped, // Read, Write 등에 사용된 Overlapped 값
-			INFINITE); // 무제한 대기
+			INFINITE);
 
-					   // 키가 NULL일 경우 종료
 		if (!completionKey)
 			return;
 
@@ -126,20 +124,17 @@ VOID IOCP::WorkerThreadCallback(VOID)
 		// NetworkSession에서 Object에 This를 넣어주어 개체를 확인할 수 있다.
 		object = overlappedEx->object;
 
-		// GQCS의 결과가 실패이거나 성공이지만 사용된 크기가 0일 경우는 
+
 		if (!successed || (successed && !numberOfByteTransfered))
 		{
-			// Accept한 경우와
 			if (overlappedEx->ioType == IO_ACCEPT)
 				OnIoConnected(object);
-			// 접속이 종료된 경우
 			else
 				OnIoDisconnected(object);
 
 			continue;
 		}
 
-		// 타입에 맞게 설정한 OverlappedEx를 넣어주는 것. 데이터를 받았을 때와 보낼 때
 		switch (overlappedEx->ioType)
 		{
 		case IO_READ:
