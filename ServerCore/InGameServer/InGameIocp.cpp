@@ -13,14 +13,6 @@ InGameIocp::~InGameIocp()
 }
 
 
-DWORD WINAPI GameThreadCallback(LPVOID parameter)
-{
-	InGameIocp *owner = (InGameIocp*)parameter;
-	owner->GameThreadCallback();
-
-	return 0;
-}
-
 BOOL InGameIocp::Begin(VOID)
 {
 	if (!IOCP::Begin())
@@ -87,40 +79,13 @@ BOOL InGameIocp::Begin(VOID)
 		return FALSE;
 	}
 
-	mGameThreadDestroyEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-	if (!mGameThreadDestroyEvent)
-	{
-		End();
-
-		return FALSE;
-	}
-
-	mGameThreadHandle = CreateThread(NULL, 0, ::GameThreadCallback, this, 0, NULL);
-	if (!mGameThreadHandle)
-	{
-		End();
-
-		return FALSE;
-	}
-
 	GgameDBManager.Begin();
-
 
 	return TRUE;
 }
 
 BOOL InGameIocp::End(VOID)
 {
-	if (mGameThreadDestroyEvent && mGameThreadHandle)
-	{
-		SetEvent(mGameThreadDestroyEvent);
-
-		WaitForSingleObject(mGameThreadHandle, INFINITE);
-
-		CloseHandle(mGameThreadDestroyEvent);
-		CloseHandle(mGameThreadHandle);
-	}
-
 	IOCP::End();
 
 	mRoomManager.End();
@@ -130,19 +95,6 @@ BOOL InGameIocp::End(VOID)
 	mListenSession->End();
 
 	return TRUE;
-}
-
-VOID InGameIocp::GameThreadCallback(VOID)
-{
-	while (TRUE)
-	{
-		DWORD result = WaitForSingleObject(mGameThreadDestroyEvent, 1000);
-
-		if (result == WAIT_OBJECT_0)
-			return;
-
-		mRoomManager.CheckGameTime(this);
-	}
 }
 
 VOID InGameIocp::OnIoConnected(VOID * object)

@@ -89,30 +89,3 @@ FriendshipGameRoom* FriGameRoomManager::QuickJoin(UserInfo *userInfo, USHORT &sl
 	}
 	return NULL;
 }
-
-BOOL FriGameRoomManager::CheckGameTime(InGameIocp *iocp)
-{
-	ThreadSync Sync;
-
-	BYTE	WriteBuffer[MAX_BUFFER_LENGTH] = { 0, };
-
-	for (DWORD i = 0; i<mRoomVector.size(); i++)
-	{
-		FriendshipGameRoom *room = mRoomVector[i];
-
-		if (room->GetIsGameStarted())
-		{
-			if (!room->DecreaseGameTime())
-			{
-				room->EndGame(iocp);
-
-				Log::WriteLog(_T("# WriteAll packet : PT_GAME_END_M\n"));
-			}
-			else
-			{
-			}	
-		}
-	}
-
-	return TRUE;
-}

@@ -100,23 +100,3 @@ BOOL UserInfoManager::WriteAll(DWORD protocol, BYTE *data, DWORD dataLength)
 
 	return TRUE;
 }
-
-BOOL UserInfoManager::IsAlreadyLogined(LPTSTR userID)
-{
-	ThreadSync sync;
-
-	if (!userID)
-		return TRUE;
-
-	TCHAR UserID[20] = { 0, };
-
-	for (DWORD i = 0; i < mUserInfoVector.size(); i++)
-	{
-		UserInfo* userInfo = mUserInfoVector[i];
-
-		if (!_tcscmp(userInfo->GetUserID(), userID))
-			return TRUE;
-	}
-
-	return FALSE;
-}

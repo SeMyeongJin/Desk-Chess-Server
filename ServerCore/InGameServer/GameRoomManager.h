@@ -16,6 +16,5 @@ public:
 	BOOL End(VOID);
 
 	GameRoom* QuickJoin(UserInfo* userInfo, USHORT &slotNumber);
-	BOOL CheckGameTime(InGameIocp *iocp);
 };
 

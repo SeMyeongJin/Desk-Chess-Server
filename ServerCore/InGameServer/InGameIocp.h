@@ -12,14 +12,9 @@ private:
 	GameRoomManager mRoomManager;
 	FriGameRoomManager mFriRoomManager;
 
-	HANDLE mGameThreadHandle;
-	HANDLE mGameThreadDestroyEvent;
-
 public:
 	BOOL Begin(VOID);
 	BOOL End(VOID);
-
-	VOID GameThreadCallback(VOID);
 
 protected:
 	VOID OnIoRead(VOID *object, DWORD dataLength);

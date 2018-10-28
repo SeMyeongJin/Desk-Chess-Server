@@ -5,7 +5,6 @@
 GameRoom::GameRoom()
 {
 	mRoomNumber					= 0;
-	mMapNumber					= 0;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
@@ -25,7 +24,6 @@ BOOL GameRoom::Begin(DWORD roomNumber)
 	ThreadSync sync;
 
 	mRoomNumber					= roomNumber;
-	mMapNumber					= 0;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
@@ -41,7 +39,6 @@ BOOL GameRoom::End(VOID)
 	ThreadSync sync;
 
 	mRoomNumber					= 0;
-	mMapNumber					= 0;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
@@ -89,7 +86,6 @@ BOOL GameRoom::JoinUser(UserInfo *userInfo, USHORT &slotNumber)
 			if (mCurrentUserNum == 1)
 			{
 				mRoomManager = userInfo;
-				mMapNumber = 0;
 			}
 
 			return TRUE;
@@ -174,39 +170,11 @@ BOOL GameRoom::WriteOpponent(UserInfo *userInfo, DWORD protocol, BYTE *packet, D
 	return TRUE;
 }
 
-BOOL GameRoom::IsAllLoadComplete(VOID)
-{
-	ThreadSync sync;
-
-	if (mUsers[0]->GetIsLoadComplete() && mUsers[1]->GetIsLoadComplete())
-		return TRUE;
-
-	return FALSE;
-}
-
-BOOL GameRoom::IsAllIntroComplete(VOID)
-{
-	ThreadSync sync;
-
-	if (mUsers[0]->GetIsIntroComplete() && mUsers[1]->GetIsIntroComplete())
-		return TRUE;
-
-	return FALSE;
-}
-
 DWORD GameRoom::ReadyComplete(VOID)
 {
 	ThreadSync sync;
 
 	mIsReadyComplete = TRUE;
-
-	for (USHORT i = 0; i<2; i++)
-	{
-		if (mUsers[i])
-		{
-			mUsers[i]->SetIsReady(FALSE);
-		}
-	}
 
 	return 0;
 }
@@ -215,25 +183,7 @@ BOOL GameRoom::StartGame(VOID)
 {
 	ThreadSync Sync;
 
-	for (USHORT i = 0; i<2; i++)
-	{
-		if (mUsers[i])
-		{
-			if (!mUsers[i]->GetIsIntroComplete())
-				return FALSE;
-		}
-	}
-
 	mIsGameStarted = TRUE;
-
-	for (USHORT i = 0; i<2; i++)
-	{
-		if (mUsers[i])
-		{
-			mUsers[i]->SetIsLoadComplete(FALSE);
-			mUsers[i]->SetIsIntroComplete(FALSE);
-		}
-	}
 
 	return TRUE;
 }
@@ -241,16 +191,6 @@ BOOL GameRoom::StartGame(VOID)
 BOOL GameRoom::EndGame(InGameIocp *iocp)
 {
 	ThreadSync sync;
-
-	for (USHORT i = 0; i<2; i++)
-	{
-		if (mUsers[i])
-		{
-			mUsers[i]->SetIsLoadComplete(FALSE);
-			mUsers[i]->SetIsIntroComplete(FALSE);
-			mUsers[i]->SetIsReady(FALSE);
-		}
-	}
 
 	mIsReadyComplete = FALSE;
 	mIsGameStarted = FALSE;

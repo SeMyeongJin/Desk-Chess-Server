@@ -21,8 +21,6 @@ public:
 	BOOL AcceptALL(VOID);
 	BOOL WriteAll(DWORD protocol, BYTE *data, DWORD dataLength);
 
-	BOOL IsAlreadyLogined(LPTSTR userID);
-
 	inline VOID IncreaseUserInfoNum(VOID) { InterlockedIncrement((LONG*)&mCurrentUserNum); }
 	inline VOID DecreaseUserInfoNum(VOID) { InterlockedDecrement((LONG*)&mCurrentUserNum); }
 };

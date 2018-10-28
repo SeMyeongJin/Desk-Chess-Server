@@ -89,30 +89,3 @@ GameRoom* GameRoomManager::QuickJoin(UserInfo *userInfo, USHORT &slotNumber)
 
 	return NULL;
 }
-
-BOOL GameRoomManager::CheckGameTime(InGameIocp *iocp)
-{
-	ThreadSync Sync;
-
-	BYTE	WriteBuffer[MAX_BUFFER_LENGTH] = { 0, };
-
-	for (DWORD i = 0; i<mRoomVector.size(); i++)
-	{
-		GameRoom *room = mRoomVector[i];
-
-		if (room->GetIsGameStarted())
-		{
-			if (!room->DecreaseGameTime())
-			{
-				room->EndGame(iocp);
-
-				Log::WriteLog(_T("# WriteAll packet : PT_GAME_END_M\n"));
-			}
-			else
-			{
-			}
-		}
-	}
-
-	return TRUE;
-}

@@ -59,27 +59,6 @@ inline VOID READ_PT_REQ_USER_INFO(BYTE *buffer, S_PT_REQ_USER_INFO &parameter)
 
 	stream->ReadWCHARs(parameter.userName, 20);
 }
-// REQ_USER_INFO_WRITE
-inline DWORD WRITE_PT_REQ_USER_INFO(BYTE *buffer, S_PT_REQ_USER_INFO &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.userName, 20);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_REQ_USER_INFO(BYTE *buffer, WCHAR *name)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	WCHAR _name[20] = { 0, };
-	_tcsncpy(_name, name, 20);
-	stream->WriteWCHARs(_name, 20);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -92,30 +71,7 @@ typedef struct _S_PT_RES_USER_INFO
 	DWORD OFF_LOSE;
 	DWORD FRI_WIN;
 } S_PT_RES_USER_INFO;
-// RES_USER_INFO_READ
-inline VOID READ_PT_RES_USER_INFO(BYTE *buffer, S_PT_RES_USER_INFO &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->ReadDWORD(&parameter.Rating);
-	stream->ReadDWORD(&parameter.OFF_WIN);
-	stream->ReadDWORD(&parameter.OFF_LOSE);
-	stream->ReadDWORD(&parameter.FRI_WIN);
-}
 // RES_USER_INFO_WRITE
-inline DWORD WRITE_PT_RES_USER_INFO(BYTE *buffer, S_PT_RES_USER_INFO &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteDWORD(parameter.Rating);
-	stream->WriteDWORD(parameter.OFF_WIN);
-	stream->WriteDWORD(parameter.OFF_LOSE);
-	stream->WriteDWORD(parameter.FRI_WIN);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_RES_USER_INFO(BYTE *buffer, DWORD rating, DWORD off_win, DWORD off_lose, DWORD fri_win)
 {
 	StreamSP stream;
@@ -143,21 +99,6 @@ inline VOID READ_PT_OFFICIAL_GAME_START(BYTE *buffer, S_PT_OFFICIAL_GAME_START &
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 }
-// OFFICIAL_GAME_START_WRITE
-inline DWORD WRITE_PT_OFFICIAL_GAME_START(BYTE *buffer, S_PT_OFFICIAL_GAME_START &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_OFFICIAL_GAME_START(BYTE *buffer)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -167,20 +108,7 @@ typedef struct _S_PT_OFFICIAL_GAME_START_SUCC
 {
 
 } S_PT_OFFICIAL_GAME_START_SUCC;
-// OFFICIAL_GAME_START_SUCC_READ
-inline VOID READ_PT_OFFICIAL_GAME_START_SUCC(BYTE *buffer, S_PT_OFFICIAL_GAME_START_SUCC &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-}
 // OFFICIAL_GAME_START_SUCC_WRITE
-inline DWORD WRITE_PT_OFFICIAL_GAME_START_SUCC(BYTE *buffer, S_PT_OFFICIAL_GAME_START_SUCC &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_OFFICIAL_GAME_START_SUCC(BYTE *buffer)
 {
 	StreamSP stream;
@@ -197,24 +125,7 @@ typedef struct _S_PT_OFFICIAL_GAME_START_FAIL
 {
 	DWORD errorCode;
 } S_PT_OFFICIAL_GAME_START_FAIL;
-// OFFICIAL_GAME_START_FAIL_READ
-inline VOID READ_PT_OFFICIAL_GAME_START_FAIL(BYTE *buffer, S_PT_OFFICIAL_GAME_START_FAIL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->ReadDWORD(&parameter.errorCode);
-}
 // OFFICIAL_GAME_START_FAIL_WRITE
-inline DWORD WRITE_PT_OFFICIAL_GAME_START_FAIL(BYTE *buffer, S_PT_OFFICIAL_GAME_START_FAIL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteDWORD(parameter.errorCode);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_OFFICIAL_GAME_START_FAIL(BYTE *buffer, DWORD errorCode)
 {
 	StreamSP stream;
@@ -239,21 +150,6 @@ inline VOID READ_PT_FRIENDSHIP_GAME_START(BYTE *buffer, S_PT_FRIENDSHIP_GAME_STA
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 }
-// FRIENDSHIP_GAME_START_WRITE
-inline DWORD WRITE_PT_FRIENDSHIP_GAME_START(BYTE *buffer, S_PT_FRIENDSHIP_GAME_START &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_FRIENDSHIP_GAME_START(BYTE *buffer)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -263,20 +159,7 @@ typedef struct _S_PT_FRIENDSHIP_GAME_START_SUCC
 {
 
 } S_PT_FRIENDSHIP_GAME_START_SUCC;
-// FRIENDSHIP_GAME_START_READ
-inline VOID READ_PT_FRIENDSHIP_GAME_START_SUCC(BYTE *buffer, S_PT_FRIENDSHIP_GAME_START_SUCC &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-}
 // FRIENDSHIP_GAME_START_WRITE
-inline DWORD WRITE_PT_FRIENDSHIP_GAME_START_SUCC(BYTE *buffer, S_PT_FRIENDSHIP_GAME_START_SUCC &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_FRIENDSHIP_GAME_START_SUCC(BYTE *buffer)
 {
 	StreamSP stream;
@@ -293,24 +176,7 @@ typedef struct _S_PT_FRIENDSHIP_GAME_START_FAIL
 {
 	DWORD errorCode;
 } S_PT_FRIENDSHIP_GAME_START_FAIL;
-// FRIENDSHIP_GAME_START_FAIL_READ
-inline VOID READ_PT_FRIENDSHIP_GAME_START_FAIL(BYTE *buffer, S_PT_FRIENDSHIP_GAME_START_FAIL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->ReadDWORD(&parameter.errorCode);
-}
 // FRIENDSHIP_GAME_START_FAIL_WRITE
-inline DWORD WRITE_PT_FRIENDSHIP_GAME_START_FAIL(BYTE *buffer, S_PT_FRIENDSHIP_GAME_START_FAIL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteDWORD(parameter.errorCode);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_FRIENDSHIP_GAME_START_FAIL(BYTE *buffer, DWORD errorCode)
 {
 	StreamSP stream;
@@ -335,21 +201,6 @@ inline VOID READ_PT_ROOM_LEAVE(BYTE *buffer, S_PT_ROOM_LEAVE &parameter)
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 }
-// ROOM_LEAVE_WRITE
-inline DWORD WRITE_PT_ROOM_LEAVE(BYTE *buffer, S_PT_ROOM_LEAVE &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_ROOM_LEAVE(BYTE *buffer)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -359,20 +210,7 @@ typedef struct _S_PT_ROOM_LEAVE_SUCC
 {
 
 } S_PT_ROOM_LEAVE_SUCC;
-// ROOM_LEAVE_SUCC_READ
-inline VOID READ_PT_ROOM_LEAVE_SUCC(BYTE *buffer, S_PT_ROOM_LEAVE_SUCC &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-}
 // ROOM_LEAVE_SUCC_WRITE
-inline DWORD WRITE_PT_ROOM_LEAVE_SUCC(BYTE *buffer, S_PT_ROOM_LEAVE_SUCC &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_ROOM_LEAVE_SUCC(BYTE *buffer)
 {
 	StreamSP stream;
@@ -389,24 +227,7 @@ typedef struct _S_PT_ROOM_LEAVE_FAIL
 {
 	DWORD errorCode;
 } S_PT_ROOM_LEAVE_FAIL;
-// ROOM_LEAVE_FAIL_READ
-inline VOID READ_PT_ROOM_LEAVE_FAIL(BYTE *buffer, S_PT_ROOM_LEAVE_FAIL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->ReadDWORD(&parameter.errorCode);
-}
 // ROOM_LEAVE_FAIL_WRITE
-inline DWORD WRITE_PT_ROOM_LEAVE_FAIL(BYTE *buffer, S_PT_ROOM_LEAVE_FAIL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteDWORD(parameter.errorCode);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_ROOM_LEAVE_FAIL(BYTE *buffer, DWORD errorCode)
 {
 	StreamSP stream;
@@ -426,26 +247,7 @@ typedef struct _S_PT_GAME_START_ALL
 	BOOL isWhite;
 	BOOL isOfficialGame;
 } S_PT_GAME_START_ALL;
-// GAME_START_ALL_READ
-inline VOID READ_PT_GAME_START_ALL(BYTE *buffer, S_PT_GAME_START_ALL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->ReadBOOL(&parameter.isWhite);
-	stream->ReadBOOL(&parameter.isOfficialGame);
-}
 // GAME_START_ALL_WRITE
-inline DWORD WRITE_PT_GAME_START_ALL(BYTE *buffer, S_PT_GAME_START_ALL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteBOOL(parameter.isWhite);
-	stream->WriteBOOL(parameter.isOfficialGame);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_GAME_START_ALL(BYTE *buffer, BOOL isWhite, BOOL isOfficialGame)
 {
 	StreamSP stream;
@@ -465,20 +267,7 @@ typedef struct _S_PT_GAME_END_ALL
 {
 
 } S_PT_GAME_END_ALL;
-// GAME_END_ALL_READ
-inline VOID READ_PT_GAME_END_ALL(BYTE *buffer, S_PT_GAME_END_ALL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-}
 // GAME_END_ALL_WRITE
-inline DWORD WRITE_PT_GAME_END_ALL(BYTE *buffer, S_PT_GAME_END_ALL &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_GAME_END_ALL(BYTE *buffer)
 {
 	StreamSP stream;
@@ -506,16 +295,6 @@ inline VOID READ_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
 	stream->ReadWCHARs(parameter.message, 40);
 }
 // CHAT_WRITE
-inline DWORD WRITE_PT_CHAT(BYTE *buffer, S_PT_CHAT &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.user_name, 20);
-	stream->WriteWCHARs(parameter.message, 40);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_CHAT(BYTE *buffer, WCHAR *name, WCHAR *message)
 {
 	StreamSP stream;
@@ -548,15 +327,6 @@ inline VOID READ_PT_DELIVERY_CHAT(BYTE *buffer, S_PT_DELIVERY_CHAT &parameter)
 	stream->ReadWCHARs(parameter.message, 40);
 }
 // DELIVERY_CHAT_WRITE
-inline DWORD WRITE_PT_DELIVERY_CHAT(BYTE *buffer, S_PT_DELIVERY_CHAT &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.message, 40);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_DELIVERY_CHAT(BYTE *buffer, WCHAR *message)
 {
 	StreamSP stream;
@@ -592,18 +362,6 @@ inline VOID READ_PT_PIECE_MOVE(BYTE *buffer, S_PT_PIECE_MOVE &parameter)
 	stream->ReadDWORD(&parameter.afterMoveYpos);
 }
 // PIECE_MOVE_WRITE
-inline DWORD WRITE_PIECE_MOVE(BYTE *buffer, S_PT_PIECE_MOVE &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteDWORD(parameter.beforeMoveXpos);
-	stream->WriteDWORD(parameter.beforeMoveYpos);
-	stream->WriteDWORD(parameter.afterMoveXpos);
-	stream->WriteDWORD(parameter.afterMoveYpos);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_PIECE_MOVE(BYTE *buffer, DWORD bXpos, DWORD bYpos, DWORD aXpos, DWORD aYpos)
 {
 	StreamSP stream;
@@ -638,17 +396,6 @@ inline VOID READ_PT_PIECE_PROMOTION(BYTE *buffer, S_PT_PIECE_PROMOTION &paramete
 	stream->ReadDWORD(&parameter.ypos);
 }
 // PIECE_PROMOTION_WRITE
-inline DWORD WRITE_PIECE_PROMOTION(BYTE *buffer, S_PT_PIECE_PROMOTION &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteDWORD(parameter.pieceType);
-	stream->WriteDWORD(parameter.xpos);
-	stream->WriteDWORD(parameter.ypos);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_PIECE_PROMOTION(BYTE *buffer, DWORD type, DWORD xpos, DWORD ypos)
 {
 	StreamSP stream;
@@ -677,27 +424,6 @@ inline VOID READ_PT_OFFICIAL_GAME_WIN(BYTE *buffer, S_PT_OFFICIAL_GAME_WIN &para
 
 	stream->ReadWCHARs(parameter.userName, 20);
 }
-// OFFICIAL_GAME_WIN_WRITE
-inline DWORD WRITE_PT_OFFICIAL_GAME_WIN(BYTE *buffer, S_PT_OFFICIAL_GAME_WIN &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.userName, 20);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_OFFICIAL_GAME_WIN(BYTE *buffer, WCHAR *name)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	WCHAR _name[20] = { 0, };
-	_tcsncpy(_name, name, 20);
-	stream->WriteWCHARs(_name, 20);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -714,27 +440,6 @@ inline VOID READ_PT_OFFICIAL_GAME_LOSE(BYTE *buffer, S_PT_OFFICIAL_GAME_LOSE &pa
 	stream->SetBuffer(buffer);
 
 	stream->ReadWCHARs(parameter.userName, 20);
-}
-// OFFICIAL_GAME_LOSE_WRITE
-inline DWORD WRITE_PT_OFFICIAL_GAME_LOSE(BYTE *buffer, S_PT_OFFICIAL_GAME_LOSE &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.userName, 20);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_OFFICIAL_GAME_LOSE(BYTE *buffer, WCHAR *name)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	WCHAR _name[20] = { 0, };
-	_tcsncpy(_name, name, 20);
-	stream->WriteWCHARs(_name, 20);
-
-	return stream->GetLength();
 }
 
 
@@ -753,27 +458,6 @@ inline VOID READ_PT_FRIENDSHIP_GAME_WIN(BYTE *buffer, S_PT_FRIENDSHIP_GAME_WIN &
 
 	stream->ReadWCHARs(parameter.userName, 20);
 }
-// FRIENDSHIP_GAME_WIN_WRITE
-inline DWORD WRITE_PT_FRIENDSHIP_GAME_WIN(BYTE *buffer, S_PT_FRIENDSHIP_GAME_WIN &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	stream->WriteWCHARs(parameter.userName, 20);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_FRIENDSHIP_GAME_WIN(BYTE *buffer, WCHAR *name)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	WCHAR _name[20] = { 0, };
-	_tcsncpy(_name, name, 20);
-	stream->WriteWCHARs(_name, 20);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -789,21 +473,6 @@ inline VOID READ_PT_RESIGNS(BYTE *buffer, S_PT_RESIGNS &parameter)
 	StreamSP stream;
 	stream->SetBuffer(buffer);
 }
-// RESIGNS_WRITE
-inline DWORD WRITE_PT_RESIGNS(BYTE *buffer, S_PT_RESIGNS &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
-inline DWORD WRITE_PT_RESIGNS(BYTE *buffer)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 
 
 /*
@@ -813,20 +482,7 @@ typedef struct _S_PT_DELIVERY_RESIGNS
 {
 
 } S_PT_DELIVERY_RESIGNS;
-// DELIVERY_RESIGNS_READ
-inline VOID READ_PT_DELIVERY_RESIGNS(BYTE *buffer, S_PT_DELIVERY_RESIGNS &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-}
 // DELIVERY_RESIGNS_WRITE
-inline DWORD WRITE_PT_DELIVERY_RESIGNS(BYTE *buffer, S_PT_DELIVERY_RESIGNS &parameter)
-{
-	StreamSP stream;
-	stream->SetBuffer(buffer);
-
-	return stream->GetLength();
-}
 inline DWORD WRITE_PT_DELIVERY_RESIGNS(BYTE *buffer)
 {
 	StreamSP stream;

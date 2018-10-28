@@ -16,6 +16,5 @@ public:
 	BOOL End(VOID);
 
 	FriendshipGameRoom* QuickJoin(UserInfo* userInfo, USHORT &slotNumber);
-	BOOL CheckGameTime(InGameIocp *iocp);
 };
 
