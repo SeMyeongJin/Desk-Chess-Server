@@ -129,6 +129,18 @@ VOID InGameIocp::OnIoDisconnected(VOID *object)
 	UserInfo *userInfo = (UserInfo*)object;
 
 	Log::WriteLog(_T("Disconnected Session"));
+
+	if (userInfo->GetEnteredRoom() != NULL)
+	{
+		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+		userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+	}
+	if (userInfo->GetEnteredFriendshipRoom() != NULL)
+	{
+		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+		userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+	}
+
 	if (!userInfo->Reload(mListenSession->GetSocket()))
 	{
 		End();
