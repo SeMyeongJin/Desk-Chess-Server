@@ -33,6 +33,8 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_START(UserInfo * userInfo, BYTE * pPacket
 
 			userInfo->WritePacket(PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, whiteTeam, true));
 			userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, blackTeam, true));
+
+			room->SetIsGameStarting(TRUE);
 		}
 		else
 			userInfo->WritePacket(PT_OFFICIAL_GAME_START_SUCC, writeBuffer, WRITE_PT_OFFICIAL_GAME_START_SUCC(writeBuffer));
@@ -60,6 +62,8 @@ VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_START(UserInfo * userInfo, BYTE * pPack
 
 			userInfo->WritePacket(PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, whiteTeam, false));
 			userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_GAME_START_ALL, writeBuffer, WRITE_PT_GAME_START_ALL(writeBuffer, blackTeam, false));
+
+			room->SetIsGameStarting(TRUE);
 		}
 		else
 			userInfo->WritePacket(PT_FRIENDSHIP_GAME_START_SUCC, writeBuffer, WRITE_PT_FRIENDSHIP_GAME_START_SUCC(writeBuffer));
@@ -148,7 +152,7 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_WIN(UserInfo * userInfo, BYTE * pPacket)
 	READ_PT_OFFICIAL_GAME_WIN(pPacket, winData);
 
 	GgameDBManager.WinOfficialGame(winData.userName);
-	Log::WriteLog(_T("OFFICIAL GAME WIN PACKET : NAME(%s)"), winData.userName);
+	Log::WriteLog(_T("OFFICIAL GAME WIN : NAME(%s)"), winData.userName);
 }
 
 VOID InGameIocp::PROC_PT_OFFICIAL_GAME_LOSE(UserInfo * userInfo, BYTE * pPacket)
@@ -158,7 +162,7 @@ VOID InGameIocp::PROC_PT_OFFICIAL_GAME_LOSE(UserInfo * userInfo, BYTE * pPacket)
 	READ_PT_OFFICIAL_GAME_LOSE(pPacket, loseData);
 
 	GgameDBManager.LoseOfficialGame(loseData.userName);
-	Log::WriteLog(_T("OFFICIAL GAME LOSE PACKET : NAME(%s)"), loseData.userName);
+	Log::WriteLog(_T("OFFICIAL GAME LOSE : NAME(%s)"), loseData.userName);
 }
 
 VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_WIN(UserInfo * userInfo, BYTE * pPacket)
@@ -168,7 +172,7 @@ VOID InGameIocp::PROC_PT_FRIENDSHIP_GAME_WIN(UserInfo * userInfo, BYTE * pPacket
 	READ_PT_FRIENDSHIP_GAME_WIN(pPacket, winData);
 
 	GgameDBManager.WinFriendshipGame(winData.userName);
-	Log::WriteLog(_T("FRIENDSHIP GAME WIN PACKET : Name(%s)"), winData.userName);
+	Log::WriteLog(_T("FRIENDSHIP GAME WIN : Name(%s)"), winData.userName);
 }
 
 VOID InGameIocp::PROC_PT_RESIGNS(UserInfo * userInfo, BYTE * pPacket)

@@ -14,6 +14,7 @@ private:
 
 	BOOL mIsReadyComplete;					// 게임 준비 완료 확인
 	BOOL mIsGameStarted;					// 게임 시작 확인 ( 시작~끝 TRUE )
+	BOOL mIsGameStarting;
 
 	UserInfo* mUsers[2];					// 인원 
 	UserInfo *mRoomManager;					// 방장 유저
@@ -28,6 +29,8 @@ public:
 	inline BOOL GetIsFull(VOID)								{ ThreadSync sync; return mCurrentUserNum == 2 ? TRUE : FALSE; }
 	inline BOOL GetIsReadyComplete(VOID)					{ ThreadSync sync; return mIsReadyComplete; }
 	inline BOOL GetIsGameStarted(VOID)						{ ThreadSync sync; return mIsGameStarted; }
+	inline BOOL GetIsGameStarting(VOID)						{ ThreadSync sync; return mIsGameStarting; }
+	inline VOID SetIsGameStarting(BOOL isGameStarting)		{ ThreadSync sync; mIsGameStarting = isGameStarting; }
 
 public:
 	BOOL Begin(DWORD roomNumber);

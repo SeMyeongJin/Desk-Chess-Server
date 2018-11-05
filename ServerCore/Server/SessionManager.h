@@ -6,7 +6,7 @@ public:
 	SessionManager();
 	virtual ~SessionManager();
 
-private:
+public:
 	std::vector<ConnectedSession*> mConnectedSessions;
 
 public:

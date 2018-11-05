@@ -3,6 +3,7 @@
 
 GameDBManager GgameDBManager;
 
+
 InGameIocp::InGameIocp()
 {
 }
@@ -134,11 +135,15 @@ VOID InGameIocp::OnIoDisconnected(VOID *object)
 	{
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
 		userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+
+		userInfo->GetEnteredRoom()->LeaveUser(FALSE, this, userInfo);
 	}
 	if (userInfo->GetEnteredFriendshipRoom() != NULL)
 	{
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
 		userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+
+		userInfo->GetEnteredFriendshipRoom()->LeaveUser(FALSE, this, userInfo);
 	}
 
 	if (!userInfo->Reload(mListenSession->GetSocket()))

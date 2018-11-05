@@ -7,7 +7,7 @@ UserInfo::UserInfo()
 	mEnteredRoom			= NULL;
 	mEnteredFriendshipRoom  = NULL;
 
-	mIsConnected			= FALSE;
+	mIsConnected = FALSE;
 }
 
 
@@ -22,6 +22,7 @@ BOOL UserInfo::Begin(VOID)
 
 	mEnteredRoom			= NULL;
 	mEnteredFriendshipRoom  = NULL;
+	
 	mIsConnected			= FALSE;
 
 	return PacketWrapping::Begin();
@@ -33,6 +34,7 @@ BOOL UserInfo::End(VOID)
 
 	mEnteredRoom			= NULL;
 	mEnteredRoom			= NULL;
+	
 	mIsConnected			= FALSE;
 
 	return PacketWrapping::End();

@@ -15,7 +15,7 @@ VOID IOCPServer::PROC_PT_SIGNUP(ConnectedSession * pConnectedSession, DWORD dwPr
 
 		pConnectedSession->WritePacket(PT_SIGNUP_SUCC, writeBuffer, WRITE_PT_SIGNUP_SUCC(writeBuffer));
 
-		Log::WriteLog(_T(" Write Signup Packet Completely : ID(%s)"), signUpData.userID);
+		Log::WriteLog(_T(" Signup Completely : ID(%s)"), signUpData.userID);
 		return;
 	}
 	if (!GDBManager->RegistUserQuery(signUpData.userID, signUpData.userPW, signUpData.user_name, &errorCode))
@@ -34,14 +34,29 @@ VOID IOCPServer::PROC_PT_LOGIN(ConnectedSession * pConnectedSession, DWORD dwPro
 	S_PT_LOGIN_SUCC succData;
 	ZeroMemory(succData.user_name, sizeof(succData.user_name));
 
+	for (int i = 0; i < mSessionManager.mConnectedSessions.size(); i++)
+	{
+		if (pConnectedSession != mSessionManager.mConnectedSessions[i])
+		{
+			if (!_tcscmp(mSessionManager.mConnectedSessions[i]->GetUserID(), loginData.userID))
+			{
+				S_PT_LOGIN_FAIL failData;
+				failData.errorCode = EC_LOGIN_ID_ALREADY_REGIST;
+				BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
+
+				pConnectedSession->WritePacket(PT_LOGIN_FAIL, writeBuffer, WRITE_PT_LOGIN_FAIL(writeBuffer, failData.errorCode));
+				return;
+			}
+		}
+	}
 	if (GDBManager->LoginCheckQuery(loginData.userID, loginData.userPW))
 	{
 		if (GDBManager->LoadUserData(loginData.userID, loginData.userPW, succData.user_name, &succData.rating))
 		{
 			BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
 			pConnectedSession->WritePacket(PT_LOGIN_SUCC, writeBuffer, WRITE_PT_LOGIN_SUCC(writeBuffer, succData.user_name, succData.rating));
-
-			Log::WriteLog(_T(" Write login Packet Completely : ID(%s)"), loginData.userID);
+			pConnectedSession->SetUserID(loginData.userID);
+			Log::WriteLog(_T(" Login Completely : ID(%s)"), loginData.userID);
 			return;
 		}
 	}

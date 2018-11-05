@@ -5,6 +5,7 @@
 ConnectedSession::ConnectedSession()
 {
 	mConnected = FALSE;
+	ZeroMemory(mUserID, sizeof(mUserID));
 }
 
 

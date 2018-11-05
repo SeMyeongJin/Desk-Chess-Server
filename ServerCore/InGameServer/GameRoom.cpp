@@ -9,6 +9,7 @@ GameRoom::GameRoom()
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
 	mIsGameStarted				= FALSE;
+	mIsGameStarting				= FALSE;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
 }
@@ -28,6 +29,7 @@ BOOL GameRoom::Begin(DWORD roomNumber)
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
 	mIsGameStarted				= FALSE;
+	mIsGameStarting				= FALSE;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
 
@@ -43,6 +45,7 @@ BOOL GameRoom::End(VOID)
 	mRoomManager				= NULL;
 	mIsReadyComplete			= FALSE;
 	mIsGameStarted				= FALSE;
+	mIsGameStarting				= FALSE;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
 
@@ -116,6 +119,11 @@ BOOL GameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserInfo *userIn
 		mUsers[1] = NULL;
 		userInfo->SetEnteredRoom(NULL);
 		mCurrentUserNum -= 1;
+	}
+
+	if (mUsers[0] == NULL && mUsers[1] == NULL && GetIsGameStarting())
+	{
+		SetIsGameStarting(FALSE);
 	}
 
 	for (USHORT i = 0; i < 2; i++)

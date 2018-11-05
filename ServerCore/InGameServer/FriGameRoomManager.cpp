@@ -66,7 +66,7 @@ FriendshipGameRoom* FriGameRoomManager::QuickJoin(UserInfo *userInfo, USHORT &sl
 	{
 		FriendshipGameRoom *room = mRoomVector[i];
 
-		if (!room->GetIsFull() && !room->GetIsEmpty() && !room->GetIsReadyComplete())
+		if (!room->GetIsFull() && !room->GetIsEmpty() && !room->GetIsReadyComplete() && !room->GetIsGameStarting())
 		{
 			if (!room->JoinUser(userInfo, slotNumber))
 				continue;

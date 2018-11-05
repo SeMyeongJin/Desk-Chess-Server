@@ -13,8 +13,13 @@ public:
 	VOID SetConnected(BOOL bConnected);
 	BOOL GetConnected(VOID);
 
+	inline BOOL SetUserID(LPTSTR userID) { ThreadSync sync; if (!userID) return FALSE; _tcsncpy(mUserID, userID, 20); return TRUE; }
+	inline LPTSTR GetUserID(VOID) { ThreadSync sync; return mUserID; }
+
 private:
 	BOOL mConnected;
+
+	TCHAR mUserID[20];
 };
 
 /* 접속 개체 클래스, 접속 개체에 모든 행동을 관리하는 클래스 */

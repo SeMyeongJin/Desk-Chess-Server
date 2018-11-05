@@ -65,7 +65,7 @@ GameRoom* GameRoomManager::QuickJoin(UserInfo *userInfo, USHORT &slotNumber)
 	{
 		GameRoom *room = mRoomVector[i];
 
-		if (!room->GetIsFull() && !room->GetIsEmpty() && !room->GetIsReadyComplete())
+		if (!room->GetIsFull() && !room->GetIsEmpty() && !room->GetIsReadyComplete() && !room->GetIsGameStarting())
 		{
 			if (!room->JoinUser(userInfo, slotNumber))
 				continue;

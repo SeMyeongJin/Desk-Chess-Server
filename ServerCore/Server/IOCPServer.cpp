@@ -55,6 +55,10 @@ VOID IOCPServer::OnIoDisconnected(VOID * object)
 {
 	ConnectedSession *pConnectedSession = reinterpret_cast<ConnectedSession*>(object);
 	
+	Log::WriteLog(_T(" Logout Completely : ID(%s)"), pConnectedSession->GetUserID());
+
+	pConnectedSession->SetUserID(NULL);
+
 	pConnectedSession->Restart(mListen->GetSocket());
 
 	pConnectedSession->SetConnected(FALSE);
