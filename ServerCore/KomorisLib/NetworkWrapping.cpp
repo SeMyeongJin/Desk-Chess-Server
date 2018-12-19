@@ -12,7 +12,7 @@ DWORD WINAPI ReliableUdpThreadCallback(LPVOID parameter)
 	return 0;
 }
 
-NetworkWrapping::NetworkWrapping(void)
+NetworkWrapping::NetworkWrapping(VOID)
 {
 	// Accept 관련 Overlapped구조체
 	ZeroMemory(&mAcceptOverlapped, sizeof(mAcceptOverlapped));
@@ -43,7 +43,7 @@ NetworkWrapping::NetworkWrapping(void)
 	mWriteOverlapped.object = this;	// 현재 개체의 포인터를 가지고 있습니다.
 }
 
-NetworkWrapping::~NetworkWrapping(void)
+NetworkWrapping::~NetworkWrapping(VOID)
 {
 }
 

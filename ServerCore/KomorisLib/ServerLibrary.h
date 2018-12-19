@@ -33,7 +33,7 @@ typedef struct _OVERLAPPED_EX
 	VOID		*object;
 }OVERLAPPED_EX;
 
-#define MAX_BUFFER_LENGTH	4096
+#define MAX_BUFFER_LENGTH	256
 
 #ifdef _SERVER_SIDE
 #define MAX_QUEUE_LENGTH	50

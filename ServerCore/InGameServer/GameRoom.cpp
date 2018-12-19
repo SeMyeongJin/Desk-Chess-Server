@@ -7,8 +7,6 @@ GameRoom::GameRoom()
 	mRoomNumber					= 0;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
-	mIsReadyComplete			= FALSE;
-	mIsGameStarted				= FALSE;
 	mIsGameStarting				= FALSE;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
@@ -27,8 +25,6 @@ BOOL GameRoom::Begin(DWORD roomNumber)
 	mRoomNumber					= roomNumber;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
-	mIsReadyComplete			= FALSE;
-	mIsGameStarted				= FALSE;
 	mIsGameStarting				= FALSE;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
@@ -43,8 +39,6 @@ BOOL GameRoom::End(VOID)
 	mRoomNumber					= 0;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
-	mIsReadyComplete			= FALSE;
-	mIsGameStarted				= FALSE;
 	mIsGameStarting				= FALSE;
 
 	ZeroMemory(mUsers, sizeof(mUsers));
@@ -132,14 +126,6 @@ BOOL GameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserInfo *userIn
 		{
 			userInfo->WritePacket(PT_ROOM_LEAVE_SUCC, writeBuffer, WRITE_PT_ROOM_LEAVE_SUCC(writeBuffer));
 		}
-
-		if (mIsGameStarted)
-		{
-			EndGame(iocp);
-
-			WriteAll(PT_GAME_END_ALL, writeBuffer, WRITE_PT_GAME_END_ALL(writeBuffer));
-		}
-
 		return TRUE;
 	}
 
@@ -174,34 +160,6 @@ BOOL GameRoom::WriteOpponent(UserInfo *userInfo, DWORD protocol, BYTE *packet, D
 
 	if (userInfo->GetEnteredRoom()->mUsers[1] == userInfo)
 		mUsers[0]->WritePacket(protocol, packet, packetLength);
-
-	return TRUE;
-}
-
-DWORD GameRoom::ReadyComplete(VOID)
-{
-	ThreadSync sync;
-
-	mIsReadyComplete = TRUE;
-
-	return 0;
-}
-
-BOOL GameRoom::StartGame(VOID)
-{
-	ThreadSync Sync;
-
-	mIsGameStarted = TRUE;
-
-	return TRUE;
-}
-
-BOOL GameRoom::EndGame(InGameIocp *iocp)
-{
-	ThreadSync sync;
-
-	mIsReadyComplete = FALSE;
-	mIsGameStarted = FALSE;
 
 	return TRUE;
 }

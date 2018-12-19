@@ -1,16 +1,2 @@
-﻿  stdafx.cpp
-c:\program files (x86)\windows kits\8.1\include\um\dbghelp.h(1544): warning C4091: 'typedef ': ignored on left of '' when no variable is declared
-c:\program files (x86)\windows kits\8.1\include\um\dbghelp.h(3190): warning C4091: 'typedef ': ignored on left of '' when no variable is declared
-  UserInfoManager.cpp
-  UserInfo.cpp
-  ProcessGameProtocol.cpp
-  InGameServer.cpp
-  InGameIocp.cpp
-  GameRoomManager.cpp
-  GameRoom.cpp
-  GameDBManager.cpp
-  FriendshipGameRoom.cpp
-  FriGameRoomManager.cpp
-  Generating Code...
-  InGameServer.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\InGameServer.exe
+﻿  InGameServer.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\InGameServer.exe
   InGameServer.vcxproj -> C:\Users\tpaud\Documents\Visual Studio 2015\Projects\ServerCore\x64\Debug\InGameServer.pdb (Full PDB)

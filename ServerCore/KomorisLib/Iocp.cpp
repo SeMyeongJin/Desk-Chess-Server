@@ -120,6 +120,11 @@ VOID IOCP::WorkerThreadCallback(VOID)
 			return;
 
 		// Overlapped 포인터를 받아 OverlappedEx의 포인터를 확인. 
+		if (successed == FALSE) {
+			if (WSAGetLastError() != WSA_IO_PENDING) {
+				printf("error %d\n", WSAGetLastError());
+			}
+		}
 		overlappedEx = (OVERLAPPED_EX*)overlapped;
 		// NetworkSession에서 Object에 This를 넣어주어 개체를 확인할 수 있다.
 		object = overlappedEx->object;

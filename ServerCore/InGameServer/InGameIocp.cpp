@@ -91,6 +91,8 @@ BOOL InGameIocp::End(VOID)
 
 	mRoomManager.End();
 
+	mFriRoomManager.End();
+
 	mUserInfoManager.End();
 
 	mListenSession->End();
@@ -134,14 +136,16 @@ VOID InGameIocp::OnIoDisconnected(VOID *object)
 	if (userInfo->GetEnteredRoom() != NULL)
 	{
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-		userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+		if (userInfo->GetEnteredRoom()->GetIsFull())
+			userInfo->GetEnteredRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
 
 		userInfo->GetEnteredRoom()->LeaveUser(FALSE, this, userInfo);
 	}
 	if (userInfo->GetEnteredFriendshipRoom() != NULL)
 	{
 		BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-		userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
+		if (userInfo->GetEnteredFriendshipRoom()->GetIsFull())
+			userInfo->GetEnteredFriendshipRoom()->WriteOpponent(userInfo, PT_DELIVERY_RESIGNS, writeBuffer, WRITE_PT_DELIVERY_RESIGNS(writeBuffer));
 
 		userInfo->GetEnteredFriendshipRoom()->LeaveUser(FALSE, this, userInfo);
 	}
@@ -164,8 +168,6 @@ VOID InGameIocp::OnIoRead(VOID *object, DWORD dataLength)
 	BYTE packet[MAX_BUFFER_LENGTH] = { 0, };
 	DWORD packetLength = 0;
 
-	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
-
 	if (userInfo->ReadPacketForIocp(dataLength))
 	{
 		while (userInfo->GetPacket(protocol, packet, packetLength))
@@ -182,6 +184,8 @@ VOID InGameIocp::OnIoRead(VOID *object, DWORD dataLength)
 			if (protocol == PT_OFFICIAL_GAME_LOSE) PROC_PT_OFFICIAL_GAME_LOSE(userInfo, packet);
 			if (protocol == PT_FRIENDSHIP_GAME_WIN) PROC_PT_FRIENDSHIP_GAME_WIN(userInfo, packet);
 			if (protocol == PT_RESIGNS) PROC_PT_RESIGNS(userInfo, packet);
+			else 
+				printf("%d\n", protocol);
 		}
 	}
 

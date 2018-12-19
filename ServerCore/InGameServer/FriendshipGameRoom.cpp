@@ -7,9 +7,8 @@ FriendshipGameRoom::FriendshipGameRoom()
 	mRoomNumber = 0;
 	mCurrentUserNum = 0;
 	mRoomManager = NULL;
-	mIsReadyComplete = FALSE;
-	mIsGameStarted = FALSE;
 	mIsGameStarting = FALSE;
+
 	ZeroMemory(mUsers, sizeof(mUsers));
 }
 
@@ -26,9 +25,8 @@ BOOL FriendshipGameRoom::Begin(DWORD roomNumber)
 	mRoomNumber = roomNumber;
 	mCurrentUserNum = 0;
 	mRoomManager = NULL;
-	mIsReadyComplete = FALSE;
-	mIsGameStarted = FALSE;
 	mIsGameStarting = FALSE;
+
 	ZeroMemory(mUsers, sizeof(mUsers));
 
 	return TRUE;
@@ -41,9 +39,8 @@ BOOL FriendshipGameRoom::End(VOID)
 	mRoomNumber = 0;
 	mCurrentUserNum = 0;
 	mRoomManager = NULL;
-	mIsReadyComplete = FALSE;
-	mIsGameStarted = FALSE;
 	mIsGameStarting = FALSE;
+
 	ZeroMemory(mUsers, sizeof(mUsers));
 
 	return TRUE;
@@ -129,14 +126,6 @@ BOOL FriendshipGameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserIn
 		{
 			userInfo->WritePacket(PT_ROOM_LEAVE_SUCC, writeBuffer, WRITE_PT_ROOM_LEAVE_SUCC(writeBuffer));
 		}
-
-		if (mIsGameStarted)
-		{
-			EndGame(iocp);
-
-			WriteAll(PT_GAME_END_ALL, writeBuffer, WRITE_PT_GAME_END_ALL(writeBuffer));
-		}
-
 		return TRUE;
 	}
 
@@ -171,35 +160,6 @@ BOOL FriendshipGameRoom::WriteOpponent(UserInfo *userInfo, DWORD protocol, BYTE 
 
 	if (userInfo->GetEnteredFriendshipRoom()->mUsers[1] == userInfo)
 		mUsers[0]->WritePacket(protocol, packet, packetLength);
-
-	return TRUE;
-}
-
-
-DWORD FriendshipGameRoom::ReadyComplete(VOID)
-{
-	ThreadSync sync;
-
-	mIsReadyComplete = TRUE;
-
-	return 0;
-}
-
-BOOL FriendshipGameRoom::StartGame(VOID)
-{
-	ThreadSync Sync;
-
-	mIsGameStarted = TRUE;
-
-	return TRUE;
-}
-
-BOOL FriendshipGameRoom::EndGame(InGameIocp *iocp)
-{
-	ThreadSync sync;
-
-	mIsReadyComplete = FALSE;
-	mIsGameStarted = FALSE;
 
 	return TRUE;
 }
