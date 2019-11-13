@@ -12,7 +12,6 @@
 #include <MSWSock.h>
 
 #include <vector>
-#include <map>
 #include <string>
 
 using namespace std;
@@ -34,11 +33,5 @@ typedef struct _OVERLAPPED_EX
 }OVERLAPPED_EX;
 
 #define MAX_BUFFER_LENGTH	256
-
-#ifdef _SERVER_SIDE
-#define MAX_QUEUE_LENGTH	50
-#else
-#define MAX_QUEUE_LENGTH	500
-#endif
 
 #include "Log.h"
