@@ -20,8 +20,6 @@ GameRoom::~GameRoom()
 
 BOOL GameRoom::Begin(DWORD roomNumber)
 {
-	ThreadSync sync;
-
 	mRoomNumber					= roomNumber;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
@@ -34,8 +32,6 @@ BOOL GameRoom::Begin(DWORD roomNumber)
 
 BOOL GameRoom::End(VOID)
 {
-	ThreadSync sync;
-
 	mRoomNumber					= 0;
 	mCurrentUserNum				= 0;
 	mRoomManager				= NULL;
@@ -48,8 +44,6 @@ BOOL GameRoom::End(VOID)
 
 BOOL GameRoom::JoinUser(UserInfo *userInfo, USHORT &slotNumber)
 {
-	ThreadSync Sync;
-
 	if (!userInfo)
 		return FALSE;
 
@@ -94,8 +88,6 @@ BOOL GameRoom::JoinUser(UserInfo *userInfo, USHORT &slotNumber)
 
 BOOL GameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserInfo *userInfo)
 {
-	ThreadSync Sync;
-
 	BYTE writeBuffer[MAX_BUFFER_LENGTH] = { 0, };
 
 	if (!userInfo)
@@ -134,8 +126,6 @@ BOOL GameRoom::LeaveUser(BOOL isDisconnected, InGameIocp *iocp, UserInfo *userIn
 
 BOOL GameRoom::WriteAll(DWORD protocol, BYTE *packet, DWORD packetLength)
 {
-	ThreadSync sync;
-
 	if (protocol <= 0 || !packet)
 		return FALSE;
 
@@ -147,8 +137,6 @@ BOOL GameRoom::WriteAll(DWORD protocol, BYTE *packet, DWORD packetLength)
 
 BOOL GameRoom::WriteOpponent(UserInfo *userInfo, DWORD protocol, BYTE *packet, DWORD packetLength)
 {
-	ThreadSync sync;
-
 	if (!userInfo)
 		return FALSE;
 

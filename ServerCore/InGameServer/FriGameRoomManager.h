@@ -9,7 +9,7 @@ private:
 	DWORD mMaxRoomNum;
 	DWORD mCurrentRoomNum;
 
-	std::vector<FriendshipGameRoom*> mRoomVector;
+	std::map<int, FriendshipGameRoom*> mRoomMap;
 
 public:
 	BOOL Begin(DWORD maxRoomNum);

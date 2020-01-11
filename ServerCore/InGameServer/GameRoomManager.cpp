@@ -23,8 +23,8 @@ BOOL GameRoomManager::Begin(DWORD maxRoomNum)
 		GameRoom *room = new GameRoom();
 
 		if (room->Begin(i))
+			mRoomMap.insert(pair<int, GameRoom*>((int)i, room));
 
-			mRoomVector.push_back(room);
 		else
 		{
 			End();
@@ -38,32 +38,28 @@ BOOL GameRoomManager::Begin(DWORD maxRoomNum)
 
 BOOL GameRoomManager::End(VOID)
 {
-	ThreadSync sync;
-
-	for (DWORD i = 0; i<mRoomVector.size(); i++)
+	for (DWORD i = 0; i<mRoomMap.size(); i++)
 	{
-		GameRoom *room = mRoomVector[i];
+		GameRoom *room = mRoomMap[i];
 
 		room->End();
 
 		delete room;
 	}
 
-	mRoomVector.clear();
+	mRoomMap.clear();
 
 	return TRUE;
 }
 
 GameRoom* GameRoomManager::QuickJoin(UserInfo *userInfo, USHORT &slotNumber)
 {
-	ThreadSync sync;
-
 	if (!userInfo)
 		return NULL;
 
-	for (DWORD i = 0; i<mRoomVector.size(); i++)
+	for (DWORD i = 0; i<mRoomMap.size(); i++)
 	{
-		GameRoom *room = mRoomVector[i];
+		GameRoom *room = mRoomMap[i];
 
 		if (!room->GetIsFull() && !room->GetIsEmpty() && !room->GetIsGameStarting())
 		{
@@ -74,9 +70,9 @@ GameRoom* GameRoomManager::QuickJoin(UserInfo *userInfo, USHORT &slotNumber)
 		}
 	}
 
-	for (DWORD i = 0; i<mRoomVector.size(); i++)
+	for (DWORD i = 0; i<mRoomMap.size(); i++)
 	{
-		GameRoom *room = mRoomVector[i];
+		GameRoom *room = mRoomMap[i];
 
 		if (room->GetIsEmpty())
 		{
