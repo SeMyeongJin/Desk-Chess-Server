@@ -16,8 +16,6 @@ UserInfoManager::~UserInfoManager()
 
 BOOL UserInfoManager::Begin(DWORD maxUserNum, SOCKET listenSocket)
 {
-	ThreadSync sync;
-
 	if (maxUserNum <= 0 || !listenSocket)
 		return FALSE;
 
@@ -31,7 +29,8 @@ BOOL UserInfoManager::Begin(DWORD maxUserNum, SOCKET listenSocket)
 		UserInfo *userInfo = new UserInfo();
 		
 		if (userInfo->Begin())
-			mUserInfoVector.push_back(userInfo);
+			mUserInfoMap.insert(pair<int, UserInfo*>((int)i, userInfo));
+
 		else
 		{
 			End();
@@ -45,29 +44,26 @@ BOOL UserInfoManager::Begin(DWORD maxUserNum, SOCKET listenSocket)
 
 BOOL UserInfoManager::End(VOID)
 {
-	ThreadSync sync;
-
-	for (DWORD i = 0; i < mUserInfoVector.size(); i++)
+	for (DWORD i = 0; i < mUserInfoMap.size(); i++)
 	{
-		UserInfo *userInfo = mUserInfoVector[i];
+		UserInfo *userInfo = mUserInfoMap[i];
 
 		userInfo->End();
 
 		delete userInfo;
 	}
 
-	mUserInfoVector.clear();
+	mUserInfoMap.clear();
+
 
 	return TRUE;
 }
 
 BOOL UserInfoManager::AcceptALL(VOID)
 {
-	ThreadSync sync;
-
-	for (DWORD i = 0; i < mUserInfoVector.size(); i++)
+	for (DWORD i = 0; i < mUserInfoMap.size(); i++)
 	{
-		UserInfo *userInfo = mUserInfoVector[i];
+		UserInfo *userInfo = mUserInfoMap[i];
 
 		if (!userInfo->Accept(mlistenSocket))
 		{
@@ -87,9 +83,9 @@ BOOL UserInfoManager::WriteAll(DWORD protocol, BYTE *data, DWORD dataLength)
 	if (!data)
 		return FALSE;
 
-	for (DWORD i = 0; i < mUserInfoVector.size(); i++)
+	for (DWORD i = 0; i < mUserInfoMap.size(); i++)
 	{
-		UserInfo *userInfo = mUserInfoVector[i];
+		UserInfo *userInfo = mUserInfoMap[i];
 
 		if (userInfo->GetIsConnected())
 		{

@@ -6,7 +6,7 @@ public:
 	virtual ~UserInfoManager();
 
 private:
-	std::vector<UserInfo*> mUserInfoVector;
+	std::map<int, UserInfo*> mUserInfoMap;
 
 	DWORD mMaxUserNum;						// 최대 인원
 	DWORD mCurrentUserNum;					// 현재 인원
